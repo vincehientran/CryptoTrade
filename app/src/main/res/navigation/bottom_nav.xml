@@ -20,4 +20,9 @@
         android:name="com.vinnick.cryptotrade.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" />
+    <fragment
+        android:id="@+id/currencyFragment"
+        android:name="com.vinnick.cryptotrade.CurrencyFragment"
+        android:label="fragment_currency"
+        tools:layout="@layout/fragment_currency" />
 </navigation>
