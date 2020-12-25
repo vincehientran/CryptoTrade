@@ -41,6 +41,8 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
 
     private LineGraphSeries<DataPoint> graphSeries;
 
+    private Double[][] data;
+
     public CurrencyFragment() {
         // Required empty public constructor
     }
@@ -166,5 +168,11 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
             data[i] = v;
         }
         return data;
+    }
+
+    private void loadData() {
+
+
+        // new CurrencyHistoryAsync(this).execute(currency,type);
     }
 }
