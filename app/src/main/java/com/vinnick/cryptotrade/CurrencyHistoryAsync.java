@@ -16,8 +16,10 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class CurrencyHistoryAsync extends AsyncTask<String, Void, String> {
 
@@ -79,13 +81,7 @@ public class CurrencyHistoryAsync extends AsyncTask<String, Void, String> {
                 break;
 
             case "1W":
-                DataPoint[] tempDataDay1;
-                DataPoint[] tempDataDay2;
-                DataPoint[] tempDataDay3;
-                DataPoint[] tempDataDay4;
-                DataPoint[] tempDataDay5;
-                DataPoint[] tempDataDay6;
-                DataPoint[] tempDataDay7;
+                List<> tempDataPoints = new ArrayList<>();
                 for (int i = 0; i < 7; i++) {
                     cal.add(Calendar.DATE, -7+i);
                     result = cal.getTime();
@@ -93,29 +89,6 @@ public class CurrencyHistoryAsync extends AsyncTask<String, Void, String> {
                     url = API_LINK_BEGINNING + API_KEY + "&currency=" + currency + "&start=" + date + "T00%3A00%3A00Z";
                     try {
                         parseDataPoints(requestData(url));
-                        switch (i) {
-                            case 0:
-                                tempDataDay1 = dataPoints.clone();
-                                break;
-                            case 1:
-                                tempDataDay2 = dataPoints.clone();
-                                break;
-                            case 2:
-                                tempDataDay3 = dataPoints.clone();
-                                break;
-                            case 3:
-                                tempDataDay4 = dataPoints.clone();
-                                break;
-                            case 4:
-                                tempDataDay5 = dataPoints.clone();
-                                break;
-                            case 5:
-                                tempDataDay6 = dataPoints.clone();
-                                break;
-                            case 6:
-                                tempDataDay7 = dataPoints.clone();
-                                break;
-                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     } catch (IOException e) {

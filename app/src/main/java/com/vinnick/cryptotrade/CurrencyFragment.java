@@ -116,7 +116,7 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
                 loadData();
                 break;
             case R.id.button_currency_1w:
-                type = "1W";
+                type = "1M";
                 loadData();
                 break;
             case R.id.button_currency_1m:
