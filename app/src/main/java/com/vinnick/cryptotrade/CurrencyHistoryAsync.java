@@ -81,7 +81,7 @@ public class CurrencyHistoryAsync extends AsyncTask<String, Void, String> {
                 break;
 
             case "1W":
-                List<> tempDataPoints = new ArrayList<>();
+                List<DataPoint> tempDataPoints = new ArrayList<>();
                 for (int i = 0; i < 7; i++) {
                     cal.add(Calendar.DATE, -7+i);
                     result = cal.getTime();
@@ -89,6 +89,9 @@ public class CurrencyHistoryAsync extends AsyncTask<String, Void, String> {
                     url = API_LINK_BEGINNING + API_KEY + "&currency=" + currency + "&start=" + date + "T00%3A00%3A00Z";
                     try {
                         parseDataPoints(requestData(url));
+                        for (int j = 0; j < dataPoints.length; j++) {
+                            
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     } catch (IOException e) {
