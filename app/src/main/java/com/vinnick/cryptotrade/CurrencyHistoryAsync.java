@@ -1,9 +1,9 @@
 package com.vinnick.cryptotrade;
 
 import android.os.AsyncTask;
-import android.provider.ContactsContract;
 
 import com.jjoe64.graphview.series.DataPoint;
+import com.vinnick.cryptotrade.ActivitiesAndFragments.CurrencyFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,7 +13,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
@@ -32,7 +31,7 @@ public class CurrencyHistoryAsync extends AsyncTask<String, Void, String> {
     private DataPoint[] dataPoints;
     private String type;
 
-    CurrencyHistoryAsync(CurrencyFragment fragment) {
+    public CurrencyHistoryAsync(CurrencyFragment fragment) {
         currencyFragment = fragment;
     }
 

@@ -1,4 +1,4 @@
-package com.vinnick.cryptotrade;
+package com.vinnick.cryptotrade.ActivitiesAndFragments;
 
 import android.os.Bundle;
 
@@ -17,6 +17,8 @@ import com.jjoe64.graphview.series.DataPointInterface;
 import com.jjoe64.graphview.series.LineGraphSeries;
 import com.jjoe64.graphview.series.OnDataPointTapListener;
 import com.jjoe64.graphview.series.Series;
+import com.vinnick.cryptotrade.CurrencyHistoryAsync;
+import com.vinnick.cryptotrade.R;
 
 /**
  * A simple {@link Fragment} subclass.

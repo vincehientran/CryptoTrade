@@ -7,22 +7,22 @@
 
     <fragment
         android:id="@+id/portfolioFragment"
-        android:name="com.vinnick.cryptotrade.PortfolioFragment"
+        android:name="com.vinnick.cryptotrade.ActivitiesAndFragments.PortfolioFragment"
         android:label="fragment_portfolio"
         tools:layout="@layout/fragment_portfolio" />
     <fragment
         android:id="@+id/watchlistFragment"
-        android:name="com.vinnick.cryptotrade.WatchlistFragment"
+        android:name="com.vinnick.cryptotrade.ActivitiesAndFragments.WatchlistFragment"
         android:label="fragment_watchlist"
         tools:layout="@layout/fragment_watchlist" />
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.vinnick.cryptotrade.SearchFragment"
+        android:name="com.vinnick.cryptotrade.ActivitiesAndFragments.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" />
     <fragment
         android:id="@+id/currencyFragment"
-        android:name="com.vinnick.cryptotrade.CurrencyFragment"
+        android:name="com.vinnick.cryptotrade.ActivitiesAndFragments.CurrencyFragment"
         android:label="fragment_currency"
         tools:layout="@layout/fragment_currency" />
 </navigation>
