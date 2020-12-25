@@ -1,14 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".CurrencyFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:id="@+id/textView_currency_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Bitcoin"
+        android:textSize="30sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.jjoe64.graphview.GraphView
+        android:id="@+id/graph_currency"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="300dip"
+        android:layout_marginTop="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_currency_title" />
+
+    <Button
+        android:id="@+id/button_currency_1d"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="1D"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/graph_currency" />
+
+    <Button
+        android:id="@+id/button_currency_1w"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1W"
+        app:layout_constraintStart_toEndOf="@+id/button_currency_1d"
+        app:layout_constraintTop_toBottomOf="@+id/graph_currency" />
+
+    <Button
+        android:id="@+id/button_currency_1m"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1M"
+        app:layout_constraintStart_toEndOf="@+id/button_currency_1w"
+        app:layout_constraintTop_toBottomOf="@+id/graph_currency" />
+
+    <Button
+        android:id="@+id/button_currency_3m"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="3M"
+        app:layout_constraintStart_toEndOf="@+id/button_currency_1m"
+        app:layout_constraintTop_toBottomOf="@+id/graph_currency" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
