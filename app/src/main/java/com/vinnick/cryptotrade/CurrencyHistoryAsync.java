@@ -13,6 +13,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
@@ -27,10 +28,9 @@ public class CurrencyHistoryAsync extends AsyncTask<String, Void, String> {
     // private static final String API_LINK_END = "&currency=BTC&start=2018-04-14T00%3A00%3A00Z&end=2018-05-14T00%3A00%3A00Z";
     private static final String API_KEY = "66d6fc35ed618c1fbf359c96d88b671c";
 
-
-
     private CurrencyFragment currencyFragment;
     private DataPoint[] dataPoints;
+    private String type;
 
     CurrencyHistoryAsync(CurrencyFragment fragment) {
         currencyFragment = fragment;
@@ -50,7 +50,7 @@ public class CurrencyHistoryAsync extends AsyncTask<String, Void, String> {
 
         }
 
-        currencyFragment.updateGraph(dataPoints);
+        currencyFragment.updateGraph(dataPoints, type);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class CurrencyHistoryAsync extends AsyncTask<String, Void, String> {
         // strings[0] - currency ("BTC","ETH","BSV","LTC")
         // strings[1] - type ("1D","1W","1M","3M","1Y","5Y")
         String currency = strings[0];
-        String type = strings[1];
+        type = strings[1];
 
 
         String url;
@@ -82,21 +82,37 @@ public class CurrencyHistoryAsync extends AsyncTask<String, Void, String> {
 
             case "1W":
                 List<DataPoint> tempDataPoints = new ArrayList<>();
-                for (int i = 0; i < 7; i++) {
+                DataPoint tempDataPoint;
+                for (int i = 0; i < 8; i++) {
+                    cal = Calendar.getInstance();
                     cal.add(Calendar.DATE, -7+i);
                     result = cal.getTime();
-                    date = sdf.format(result);
-                    url = API_LINK_BEGINNING + API_KEY + "&currency=" + currency + "&start=" + date + "T00%3A00%3A00Z";
+                    String startDate = sdf.format(result);
+
+                    cal = Calendar.getInstance();
+                    cal.add(Calendar.DATE, -7+i+1);
+                    result = cal.getTime();
+                    String endDate = sdf.format(result);
+                    url = API_LINK_BEGINNING + API_KEY + "&currency=" + currency + "&start=" + startDate + "T00%3A00%3A00Z" + "&end=" + endDate + "T00%3A00%3A00Z";
                     try {
                         parseDataPoints(requestData(url));
-                        for (int j = 0; j < dataPoints.length; j++) {
-                            
+                        for (int j = 0; j < dataPoints.length; j++){
+                            double x = dataPoints[j].getX();
+                            double y = dataPoints[j].getY();
+                            tempDataPoint = new DataPoint(x,y);
+                            tempDataPoints.add(tempDataPoint);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                }
+
+                dataPoints = new DataPoint[tempDataPoints.size()];
+                for (int i = 0; i < tempDataPoints.size(); i++) {
+                    double y = tempDataPoints.get(i).getY();
+                    dataPoints[i] = new DataPoint(i, y);
                 }
                 break;
 

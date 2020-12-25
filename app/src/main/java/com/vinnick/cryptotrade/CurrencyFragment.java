@@ -116,7 +116,7 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
                 loadData();
                 break;
             case R.id.button_currency_1w:
-                type = "1M";
+                type = "1W";
                 loadData();
                 break;
             case R.id.button_currency_1m:
@@ -148,7 +148,7 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
         new CurrencyHistoryAsync(this).execute(currency, type);
     }
 
-    public void updateGraph(DataPoint[] dataPoints) {
+    public void updateGraph(DataPoint[] dataPoints, String dataPointstype) {
         graphSeries.resetData(dataPoints);
 
         double maxX = graph.getViewport().getMaxX(true);
