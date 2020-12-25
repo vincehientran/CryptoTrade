@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView;
@@ -18,6 +19,8 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 import com.jjoe64.graphview.series.OnDataPointTapListener;
 import com.jjoe64.graphview.series.Series;
 import com.vinnick.cryptotrade.CurrencyHistoryAsync;
+import com.vinnick.cryptotrade.CurrencyPriceAsync;
+import com.vinnick.cryptotrade.CurrentPrice;
 import com.vinnick.cryptotrade.R;
 
 /**
@@ -36,6 +39,7 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
     private String mParam1;
     private String mParam2;
 
+    private View view;
     private GraphView graph;
     private Button button1D;
     private Button button1W;
@@ -83,7 +87,9 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_currency, container, false);
+        view = inflater.inflate(R.layout.fragment_currency, container, false);
+
+        currency = "BTC";
 
         graph = (GraphView) view.findViewById(R.id.graph_currency);
         graphSeries = new LineGraphSeries<>(generateSeries1D());
@@ -106,6 +112,8 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
         button1M.setOnClickListener(this);
         button3M = view.findViewById(R.id.button_currency_3m);
         button3M.setOnClickListener(this);
+
+        loadPrice();
 
         return view;
     }
@@ -145,8 +153,6 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
     }
 
     private void loadData() {
-        currency = "BTC";
-
         new CurrencyHistoryAsync(this).execute(currency, type);
     }
 
@@ -169,5 +175,14 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
         }
         graph.getViewport().setMaxY(maxY);
 
+    }
+
+    private void loadPrice() {
+        new CurrencyPriceAsync(this).execute(currency);
+    }
+
+    public void updatePrice(String newPrice) {
+        TextView textViewPrice = view.findViewById(R.id.textView_currency_price);
+        textViewPrice.setText(newPrice);
     }
 }
