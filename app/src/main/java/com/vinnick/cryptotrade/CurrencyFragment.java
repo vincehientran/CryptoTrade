@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.DataPointInterface;
 import com.jjoe64.graphview.series.LineGraphSeries;
@@ -39,9 +40,10 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
     private Button button1M;
     private Button button3M;
 
+    private String currency;
     private LineGraphSeries<DataPoint> graphSeries;
-
     private Double[][] data;
+    private String type;
 
     public CurrencyFragment() {
         // Required empty public constructor
@@ -91,6 +93,8 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
         });
         graph.addSeries(graphSeries);
         graph.getGridLabelRenderer().setHorizontalLabelsVisible(false);
+        graph.getGridLabelRenderer().setVerticalLabelsVisible(false);
+        graph.getGridLabelRenderer().setGridStyle(GridLabelRenderer.GridStyle.NONE);
 
         button1D = view.findViewById(R.id.button_currency_1d);
         button1D.setOnClickListener(this);
@@ -108,16 +112,20 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_currency_1d:
-                graphSeries.resetData(generateSeries1D());
+                type = "1D";
+                loadData();
                 break;
             case R.id.button_currency_1w:
-                graphSeries.resetData(generateSeries1W());
+                type = "1W";
+                loadData();
                 break;
             case R.id.button_currency_1m:
-                graphSeries.resetData(generateSeries1M());
+                type = "1M";
+                loadData();
                 break;
             case R.id.button_currency_3m:
-                graphSeries.resetData(generateSeries3M());
+                type = "3M";
+                loadData();
                 break;
         }
     }
@@ -134,45 +142,30 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
         return data;
     }
 
-    public DataPoint[] generateSeries1W(){
-        int count = 120;
-        DataPoint[] data = new DataPoint[count];
-        for (int i=0; i < count; i++) {
-            double x = i;
-            double y = Math.sin(Math.PI * i*0.1);
-            DataPoint v = new DataPoint(x, y);
-            data[i] = v;
-        }
-        return data;
-    }
-
-    public DataPoint[] generateSeries1M(){
-        int count = 120;
-        DataPoint[] data = new DataPoint[count];
-        for (int i=0; i < count; i++) {
-            double x = i;
-            double y = Math.sin(Math.PI * i*0.3);
-            DataPoint v = new DataPoint(x, y);
-            data[i] = v;
-        }
-        return data;
-    }
-
-    public DataPoint[] generateSeries3M(){
-        int count = 120;
-        DataPoint[] data = new DataPoint[count];
-        for (int i=0; i < count; i++) {
-            double x = i;
-            double y = Math.sin(Math.PI * i*0.6);
-            DataPoint v = new DataPoint(x, y);
-            data[i] = v;
-        }
-        return data;
-    }
-
     private void loadData() {
+        currency = "BTC";
 
+        new CurrencyHistoryAsync(this).execute(currency, type);
+    }
 
-        // new CurrencyHistoryAsync(this).execute(currency,type);
+    public void updateGraph(DataPoint[] dataPoints) {
+        graphSeries.resetData(dataPoints);
+
+        double maxX = graph.getViewport().getMaxX(true);
+        double maxY = graph.getViewport().getMaxY(true);
+        double minX = graph.getViewport().getMinX(true);
+        double minY = graph.getViewport().getMinY(true);
+        graph.getViewport().setXAxisBoundsManual(true);
+        graph.getViewport().setYAxisBoundsManual(true);
+        graph.getViewport().setMinX(minX);
+        graph.getViewport().setMinY(minY);
+        if (type.equals("1D")) {
+            graph.getViewport().setMaxX(24);
+        }
+        else {
+            graph.getViewport().setMaxX(maxX);
+        }
+        graph.getViewport().setMaxY(maxY);
+
     }
 }
