@@ -29,7 +29,7 @@ public class CurrencyHistoryAsync extends AsyncTask<String, Void, String> {
 
     private CurrencyFragment currencyFragment;
     private DataPoint[] dataPoints;
-    private String type;
+    private GraphType type;
 
     public CurrencyHistoryAsync(CurrencyFragment fragment) {
         currencyFragment = fragment;
@@ -49,7 +49,8 @@ public class CurrencyHistoryAsync extends AsyncTask<String, Void, String> {
 
         }
 
-        currencyFragment.updateGraph(dataPoints, type);
+        //currencyFragment.updateGraph(dataPoints);
+        currencyFragment.updateData(dataPoints, type);
     }
 
     @Override
@@ -57,7 +58,27 @@ public class CurrencyHistoryAsync extends AsyncTask<String, Void, String> {
         // strings[0] - currency ("BTC","ETH","BSV","LTC")
         // strings[1] - type ("1D","1W","1M","3M","1Y","5Y")
         String currency = strings[0];
-        type = strings[1];
+        String typeStr = strings[1];
+        switch (typeStr) {
+            case "1D":
+                type = GraphType.DATA1D;
+                break;
+            case "1W":
+                type = GraphType.DATA1W;
+                break;
+            case "1M":
+                type = GraphType.DATA1M;
+                break;
+            case "3M":
+                type = GraphType.DATA3M;
+                break;
+            case "1Y":
+                type = GraphType.DATA1Y;
+                break;
+            case "5Y":
+                type = GraphType.DATA5Y;
+                break;
+        }
 
 
         String url;
@@ -66,7 +87,7 @@ public class CurrencyHistoryAsync extends AsyncTask<String, Void, String> {
         Date result;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");;
         switch (type) {
-            case "1D":
+            case DATA1D:
                 result = cal.getTime();
                 date = sdf.format(result);
                 url = API_LINK_BEGINNING + API_KEY + "&currency=" + currency + "&start=" + date + "T00%3A00%3A00Z";
@@ -79,7 +100,7 @@ public class CurrencyHistoryAsync extends AsyncTask<String, Void, String> {
                 }
                 break;
 
-            case "1W":
+            case DATA1W:
                 List<DataPoint> tempDataPoints = new ArrayList<>();
                 DataPoint tempDataPoint;
                 for (int i = 0; i < 8; i++) {
@@ -115,7 +136,7 @@ public class CurrencyHistoryAsync extends AsyncTask<String, Void, String> {
                 }
                 break;
 
-            case "1M":
+            case DATA1M:
                 cal.add(Calendar.MONTH, -1);
                 result = cal.getTime();
                 date = sdf.format(result);
@@ -129,7 +150,7 @@ public class CurrencyHistoryAsync extends AsyncTask<String, Void, String> {
                 }
                 break;
 
-            case "3M":
+            case DATA3M:
                 cal.add(Calendar.MONTH, -3);
                 result = cal.getTime();
                 date = sdf.format(result);
@@ -143,7 +164,7 @@ public class CurrencyHistoryAsync extends AsyncTask<String, Void, String> {
                 }
                 break;
 
-            case "1Y":
+            case DATA1Y:
                 cal.add(Calendar.YEAR, -1);
                 result = cal.getTime();
                 date = sdf.format(result);
@@ -157,7 +178,7 @@ public class CurrencyHistoryAsync extends AsyncTask<String, Void, String> {
                 }
                 break;
 
-            case "5Y":
+            case DATA5Y:
                 cal.add(Calendar.YEAR, -5);
                 result = cal.getTime();
                 date = sdf.format(result);

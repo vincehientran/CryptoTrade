@@ -21,6 +21,7 @@ import com.jjoe64.graphview.series.Series;
 import com.vinnick.cryptotrade.CurrencyHistoryAsync;
 import com.vinnick.cryptotrade.CurrencyPriceAsync;
 import com.vinnick.cryptotrade.CurrentPrice;
+import com.vinnick.cryptotrade.GraphType;
 import com.vinnick.cryptotrade.R;
 
 /**
@@ -48,8 +49,13 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
 
     private String currency;
     private LineGraphSeries<DataPoint> graphSeries;
-    private Double[][] data;
-    private String type;
+    private DataPoint[] dataPoints1D;
+    private DataPoint[] dataPoints1W;
+    private DataPoint[] dataPoints1M;
+    private DataPoint[] dataPoints3M;
+    private DataPoint[] dataPoints1Y;
+    private DataPoint[] dataPoints5Y;
+    private GraphType type;
 
     public CurrencyFragment() {
         // Required empty public constructor
@@ -92,7 +98,7 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
         currency = "BTC";
 
         graph = (GraphView) view.findViewById(R.id.graph_currency);
-        graphSeries = new LineGraphSeries<>(generateSeries1D());
+        graphSeries = new LineGraphSeries<>(new DataPoint[0]);
         graphSeries.setOnDataPointTapListener(new OnDataPointTapListener() {
             @Override
             public void onTap(Series series, DataPointInterface dataPoint) {
@@ -113,7 +119,16 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
         button3M = view.findViewById(R.id.button_currency_3m);
         button3M.setOnClickListener(this);
 
+        dataPoints1D = new DataPoint[0];
+        dataPoints1W = new DataPoint[0];
+        dataPoints1M = new DataPoint[0];
+        dataPoints3M = new DataPoint[0];
+        dataPoints1Y = new DataPoint[0];
+        dataPoints5Y = new DataPoint[0];
+        type = GraphType.DATA1D;
+
         loadPrice();
+        loadData();
 
         return view;
     }
@@ -122,52 +137,63 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_currency_1d:
-                type = "1D";
-                loadData();
+                type = GraphType.DATA1D;
                 break;
             case R.id.button_currency_1w:
-                type = "1W";
-                loadData();
+                type = GraphType.DATA1W;
                 break;
             case R.id.button_currency_1m:
-                type = "1M";
-                loadData();
+                type = GraphType.DATA1M;
                 break;
             case R.id.button_currency_3m:
-                type = "3M";
-                loadData();
+                type = GraphType.DATA3M;
                 break;
         }
-    }
-
-    public DataPoint[] generateSeries1D(){
-        int count = 120;
-        DataPoint[] data = new DataPoint[count];
-        for (int i=0; i < count; i++) {
-            double x = i;
-            double y = Math.sin(Math.PI * i*0.05);
-            DataPoint v = new DataPoint(x, y);
-            data[i] = v;
-        }
-        return data;
+        updateGraph();
     }
 
     private void loadData() {
-        new CurrencyHistoryAsync(this).execute(currency, type);
+        new CurrencyHistoryAsync(this).execute(currency, "1D");
+        new CurrencyHistoryAsync(this).execute(currency, "1W");
+        new CurrencyHistoryAsync(this).execute(currency, "1M");
+        new CurrencyHistoryAsync(this).execute(currency, "3M");
+        new CurrencyHistoryAsync(this).execute(currency, "1Y");
+        new CurrencyHistoryAsync(this).execute(currency, "5Y");
     }
 
-    public void updateGraph(DataPoint[] dataPoints, String dataPointstype) {
-        graphSeries.resetData(dataPoints);
+    public void updateGraph() {
+        graph.getViewport().setXAxisBoundsManual(true);
+        graph.getViewport().setYAxisBoundsManual(true);
+        switch (type) {
+            case DATA1D:
+                graphSeries.resetData(dataPoints1D);
+                break;
+            case DATA1W:
+                graphSeries.resetData(dataPoints1W);
+                break;
+            case DATA1M:
+                graphSeries.resetData(dataPoints1M);
+                break;
+            case DATA3M:
+                graphSeries.resetData(dataPoints3M);
+                break;
+            case DATA1Y:
+                graphSeries.resetData(dataPoints1Y);
+                break;
+            case DATA5Y:
+                graphSeries.resetData(dataPoints5Y);
+                break;
+        }
+
 
         double maxX = graph.getViewport().getMaxX(true);
         double maxY = graph.getViewport().getMaxY(true);
         double minX = graph.getViewport().getMinX(true);
         double minY = graph.getViewport().getMinY(true);
-        graph.getViewport().setXAxisBoundsManual(true);
-        graph.getViewport().setYAxisBoundsManual(true);
+
         graph.getViewport().setMinX(minX);
         graph.getViewport().setMinY(minY);
-        if (type.equals("1D")) {
+        if (type == GraphType.DATA1D) {
             graph.getViewport().setMaxX(24);
         }
         else {
@@ -175,6 +201,30 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
         }
         graph.getViewport().setMaxY(maxY);
 
+    }
+
+    public void updateData(DataPoint[] data, GraphType dataType) {
+        switch (dataType) {
+            case DATA1D:
+                dataPoints1D = data;
+                break;
+            case DATA1W:
+                dataPoints1W = data;
+                break;
+            case DATA1M:
+                dataPoints1M = data;
+                break;
+            case DATA3M:
+                dataPoints3M = data;
+                break;
+            case DATA1Y:
+                dataPoints1Y = data;
+                break;
+            case DATA5Y:
+                dataPoints5Y = data;
+                break;
+        }
+        updateGraph();
     }
 
     private void loadPrice() {
