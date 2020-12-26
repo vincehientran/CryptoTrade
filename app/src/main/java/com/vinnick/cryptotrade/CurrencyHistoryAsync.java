@@ -103,14 +103,14 @@ public class CurrencyHistoryAsync extends AsyncTask<String, Void, String> {
             case DATA1W:
                 List<DataPoint> tempDataPoints = new ArrayList<>();
                 DataPoint tempDataPoint;
-                for (int i = 0; i < 7; i++) {
+                for (int i = 0; i < 8; i++) {
                     cal = Calendar.getInstance();
-                    cal.add(Calendar.DATE, -6+i);
+                    cal.add(Calendar.DATE, -7+i);
                     result = cal.getTime();
                     String startDate = sdf.format(result);
 
                     cal = Calendar.getInstance();
-                    cal.add(Calendar.DATE, -6+i+1);
+                    cal.add(Calendar.DATE, -7+i+1);
                     result = cal.getTime();
                     String endDate = sdf.format(result);
                     url = API_LINK_BEGINNING + API_KEY + "&currency=" + currency + "&start=" + startDate + "T00%3A00%3A00Z" + "&end=" + endDate + "T00%3A00%3A00Z";
@@ -128,11 +128,10 @@ public class CurrencyHistoryAsync extends AsyncTask<String, Void, String> {
                         e.printStackTrace();
                     }
                 }
-                /*
-                int hoursInAWeek = 168;
-                for (int i = 0; i < 24-(tempDataPoints.size() - hoursInAWeek); i++) {
+                int toDelete = tempDataPoints.size() - 168;
+                for (int i = 0; i < toDelete; i++) {
                     tempDataPoints.remove(0);
-                }*/
+                }
                 dataPoints = new DataPoint[tempDataPoints.size()];
                 for (int i = 0; i < tempDataPoints.size(); i++) {
                     double y = tempDataPoints.get(i).getY();
