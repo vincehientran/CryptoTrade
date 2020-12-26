@@ -46,6 +46,8 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
     private Button button1W;
     private Button button1M;
     private Button button3M;
+    private Button button1Y;
+    private Button button5Y;
 
     private String currency;
     private LineGraphSeries<DataPoint> graphSeries;
@@ -118,6 +120,10 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
         button1M.setOnClickListener(this);
         button3M = view.findViewById(R.id.button_currency_3m);
         button3M.setOnClickListener(this);
+        button1Y = view.findViewById(R.id.button_currency_1y);
+        button1Y.setOnClickListener(this);
+        button5Y = view.findViewById(R.id.button_currency_5y);
+        button5Y.setOnClickListener(this);
 
         dataPoints1D = new DataPoint[0];
         dataPoints1W = new DataPoint[0];
@@ -147,6 +153,12 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
                 break;
             case R.id.button_currency_3m:
                 type = GraphType.DATA3M;
+                break;
+            case R.id.button_currency_1y:
+                type = GraphType.DATA1Y;
+                break;
+            case R.id.button_currency_5y:
+                type = GraphType.DATA5Y;
                 break;
         }
         updateGraph();
