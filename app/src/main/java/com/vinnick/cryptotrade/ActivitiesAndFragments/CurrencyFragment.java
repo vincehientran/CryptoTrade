@@ -19,10 +19,17 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 import com.jjoe64.graphview.series.OnDataPointTapListener;
 import com.jjoe64.graphview.series.Series;
 import com.vinnick.cryptotrade.CurrencyHistoryAsync;
-import com.vinnick.cryptotrade.CurrencyPriceAsync;
-import com.vinnick.cryptotrade.CurrentPrice;
 import com.vinnick.cryptotrade.GraphType;
 import com.vinnick.cryptotrade.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.WebSocket;
+import okhttp3.WebSocketListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -48,6 +55,7 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
     private Button button3M;
     private Button button1Y;
     private Button button5Y;
+    private TextView textViewPrice;
 
     private String currency;
     private LineGraphSeries<DataPoint> graphSeries;
@@ -58,6 +66,7 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
     private DataPoint[] dataPoints1Y;
     private DataPoint[] dataPoints5Y;
     private GraphType type;
+    private OkHttpClient client;
 
     public CurrencyFragment() {
         // Required empty public constructor
@@ -96,6 +105,7 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_currency, container, false);
+        textViewPrice = view.findViewById(R.id.textView_currency_price);
 
         currency = "BTC";
 
@@ -133,8 +143,18 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
         dataPoints5Y = new DataPoint[0];
         type = GraphType.DATA1D;
 
-        loadPrice();
         loadData();
+
+        client = new OkHttpClient();
+
+
+        new Thread() {
+            @Override
+            public void run(){
+                startWS();
+            }
+        }.start();
+
 
         return view;
     }
@@ -239,12 +259,70 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
         updateGraph();
     }
 
-    private void loadPrice() {
-        new CurrencyPriceAsync(this).execute(currency);
+    private final class EchoWebSocketListener extends WebSocketListener {
+        private static final int NORMAL_CLOSURE_STATUS = 1000;
+
+        @Override
+        public void onOpen(WebSocket webSocket, Response response) {
+            webSocket.send("{\n" +
+                    "    \"type\": \"subscribe\",\n" +
+                    "    \"product_ids\": [\n" +
+                    "        \"" + currency + "-USD\"\n" +
+                    "    ],\n" +
+                    "    \"channels\": [\n" +
+                    "        \"ticker\"\n" +
+                    "    ]\n" +
+                    "}");
+        }
+
+        @Override
+        public void onMessage(WebSocket webSocket, String text) {
+            try {
+                JSONObject json = new JSONObject(text);
+                String type = json.getString("type");
+                if (type.equals("ticker")) {
+                    String priceStr = json.getString("price");
+                    if (priceStr.contains(".")) {
+                        updateTextViewPrice(priceStr);
+                    }
+                    else {
+                        updateTextViewPrice(priceStr + ".00");
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        @Override
+        public void onClosing(WebSocket webSocket, int code, String reason) {
+            webSocket.close(NORMAL_CLOSURE_STATUS, null);
+            updateTextViewPrice("Closing : " + code + " / " + reason);
+        }
+
+        @Override
+        public void onFailure(WebSocket webSocket, Throwable t, Response response) {
+            updateTextViewPrice("Error : " + t.getMessage());
+        }
     }
 
-    public void updatePrice(String newPrice) {
-        TextView textViewPrice = view.findViewById(R.id.textView_currency_price);
-        textViewPrice.setText(newPrice);
+
+    private void startWS() {
+        Request request = new Request.Builder().url("wss://ws-feed.pro.coinbase.com").build();
+        EchoWebSocketListener listener = new EchoWebSocketListener();
+        WebSocket ws = client.newWebSocket(request, listener);
+
+        client.dispatcher().executorService().shutdown();
     }
+
+    private void updateTextViewPrice(final String txt) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                textViewPrice.setText("$" + txt);
+            }
+        });
+    }
+
 }
