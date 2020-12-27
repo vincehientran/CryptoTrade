@@ -24,6 +24,22 @@ import com.vinnick.cryptotrade.CurrentPrice;
 import com.vinnick.cryptotrade.GraphType;
 import com.vinnick.cryptotrade.R;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.nio.charset.Charset;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.WebSocket;
+import okhttp3.WebSocketListener;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link CurrencyFragment#newInstance} factory method to
@@ -58,6 +74,7 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
     private DataPoint[] dataPoints1Y;
     private DataPoint[] dataPoints5Y;
     private GraphType type;
+    private OkHttpClient client;
 
     public CurrencyFragment() {
         // Required empty public constructor
@@ -135,6 +152,15 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
 
         loadPrice();
         loadData();
+
+        client = new OkHttpClient();
+
+        new Thread() {
+            @Override
+            public void run() {
+                startWS();
+            }
+        }.start();
 
         return view;
     }
@@ -246,5 +272,46 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
     public void updatePrice(String newPrice) {
         TextView textViewPrice = view.findViewById(R.id.textView_currency_price);
         textViewPrice.setText(newPrice);
+    }
+
+    private final class EchoWebSocketListener extends WebSocketListener {
+        private static final int NORMAL_CLOSURE_STATUS = 1000;
+        @Override
+        public void onOpen(WebSocket webSocket, Response response) {
+            webSocket.send("{\n" +
+                    "    \"type\": \"subscribe\",\n" +
+                    "    \"product_ids\": [\n" +
+                    "        \"BTC-USD\"\n" +
+                    "    ],\n" +
+                    "    \"channels\": [\n" +
+                    "        \"ticker\"\n" +
+                    "    ]\n" +
+                    "}");
+        }
+        @Override
+        public void onMessage(WebSocket webSocket, String text) {
+            output("text");
+        }
+        @Override
+        public void onClosing(WebSocket webSocket, int code, String reason) {
+            webSocket.close(NORMAL_CLOSURE_STATUS, null);
+        }
+    }
+
+    private void startWS() {
+        Request request = new Request.Builder().url("wss://ws-feed.pro.coinbase.com").build();
+        EchoWebSocketListener listener = new EchoWebSocketListener();
+        //WebSocket ws = client.newWebSocket(request, listener);
+        //client.dispatcher().executorService().shutdown();
+    }
+
+    private void output(final String txt) {
+        new Thread() {
+            @Override
+            public void run() {
+                TextView textPrice = view.findViewById(R.id.textView_currency_price);
+                textPrice.setText(txt);
+            }
+        }.start();
     }
 }
