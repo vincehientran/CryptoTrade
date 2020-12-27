@@ -1,9 +1,5 @@
 package com.vinnick.cryptotrade.ActivitiesAndFragments;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -27,7 +23,6 @@ import com.vinnick.cryptotrade.CurrencyPriceAsync;
 import com.vinnick.cryptotrade.CurrentPrice;
 import com.vinnick.cryptotrade.GraphType;
 import com.vinnick.cryptotrade.R;
-import com.vinnick.cryptotrade.WebsocketService;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,9 +39,6 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
-    public static final String BROADCAST_FROM_SERVICE = "BROADCAST FROM SERVICE";
-    public static final String SERVICE_DATA = "SERVICE_DATA";
 
     private View view;
     private GraphView graph;
@@ -144,15 +136,6 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
         loadPrice();
         loadData();
 
-        /*
-        getActivity().startService(new Intent(getActivity(), WebsocketService.class));
-
-        WebSocketReceiver webSocketReceiver = new WebSocketReceiver();
-
-        IntentFilter filter = new IntentFilter(BROADCAST_FROM_SERVICE);
-        getActivity().registerReceiver(webSocketReceiver, filter);
-         */
-        
         return view;
     }
 
@@ -263,24 +246,5 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
     public void updatePrice(String newPrice) {
         TextView textViewPrice = view.findViewById(R.id.textView_currency_price);
         textViewPrice.setText(newPrice);
-    }
-
-    class WebSocketReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-            String action = intent.getAction();
-            if (action == null)
-                return;
-            switch (action) {
-                case BROADCAST_FROM_SERVICE:
-                    String data = "";
-                    if (intent.hasExtra(SERVICE_DATA))
-                        data = intent.getStringExtra(SERVICE_DATA);
-                    ((TextView) view.findViewById(R.id.textView_currency_price)).setText(data);
-                    break;
-            }
-        }
     }
 }
