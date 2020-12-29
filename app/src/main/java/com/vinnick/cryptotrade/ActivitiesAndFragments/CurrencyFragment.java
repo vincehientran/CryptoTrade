@@ -25,6 +25,8 @@ import com.vinnick.cryptotrade.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -56,6 +58,9 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
     private Button button1Y;
     private Button button5Y;
     private TextView textViewPrice;
+    private TextView textViewCurrency;
+    private TextView textViewDatetime;
+    private TextView textViewValue;
 
     private String currency;
     private LineGraphSeries<DataPoint> graphSeries;
@@ -67,6 +72,13 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
     private DataPoint[] dataPoints5Y;
     private GraphType type;
     private OkHttpClient client;
+    private List<String[]> datetimeValues1D;
+    private List<String[]> datetimeValues1W;
+    private List<String[]> datetimeValues1M;
+    private List<String[]> datetimeValues3M;
+    private List<String[]> datetimeValues1Y;
+    private List<String[]> datetimeValues5Y;
+    private List<String[]> datetimeValues;
 
     public CurrencyFragment() {
         // Required empty public constructor
@@ -106,6 +118,9 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_currency, container, false);
         textViewPrice = view.findViewById(R.id.textView_currency_price);
+        textViewCurrency = view.findViewById(R.id.textView_currency_title);
+        textViewDatetime = view.findViewById(R.id.textView_currency_datetime);
+        textViewValue = view.findViewById(R.id.textView_currency_value);
 
         currency = "BTC";
 
@@ -114,7 +129,12 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
         graphSeries.setOnDataPointTapListener(new OnDataPointTapListener() {
             @Override
             public void onTap(Series series, DataPointInterface dataPoint) {
-                Toast.makeText(getActivity(), "Series1: On Data Point clicked: "+dataPoint, Toast.LENGTH_SHORT).show();
+
+                int idx = (int) dataPoint.getX();
+                String datetimeString = datetimeValues.get(idx)[0];
+                String valueString = datetimeValues.get(idx)[1];
+                textViewDatetime.setText(datetimeString);
+                textViewValue.setText(valueString);
             }
         });
         graph.addSeries(graphSeries);
@@ -199,21 +219,27 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
         switch (type) {
             case DATA1D:
                 graphSeries.resetData(dataPoints1D);
+                datetimeValues = datetimeValues1D;
                 break;
             case DATA1W:
                 graphSeries.resetData(dataPoints1W);
+                datetimeValues = datetimeValues1W;
                 break;
             case DATA1M:
                 graphSeries.resetData(dataPoints1M);
+                datetimeValues = datetimeValues1M;
                 break;
             case DATA3M:
                 graphSeries.resetData(dataPoints3M);
+                datetimeValues = datetimeValues3M;
                 break;
             case DATA1Y:
                 graphSeries.resetData(dataPoints1Y);
+                datetimeValues = datetimeValues1Y;
                 break;
             case DATA5Y:
                 graphSeries.resetData(dataPoints5Y);
+                datetimeValues = datetimeValues5Y;
                 break;
         }
 
@@ -235,27 +261,34 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
 
     }
 
-    public void updateData(DataPoint[] data, GraphType dataType) {
+    public void updateData(DataPoint[] data, GraphType dataType, List<String[]> datetimeValues) {
         switch (dataType) {
             case DATA1D:
                 dataPoints1D = data;
+                datetimeValues1D = datetimeValues;
                 break;
             case DATA1W:
                 dataPoints1W = data;
+                datetimeValues1W = datetimeValues;
                 break;
             case DATA1M:
                 dataPoints1M = data;
+                datetimeValues1M = datetimeValues;
                 break;
             case DATA3M:
                 dataPoints3M = data;
+                datetimeValues3M = datetimeValues;
                 break;
             case DATA1Y:
                 dataPoints1Y = data;
+                datetimeValues1Y = datetimeValues;
                 break;
             case DATA5Y:
                 dataPoints5Y = data;
+                datetimeValues5Y = datetimeValues;
                 break;
         }
+
         updateGraph();
     }
 

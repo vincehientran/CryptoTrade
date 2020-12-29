@@ -20,15 +20,16 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 public class CurrencyHistoryAsync extends AsyncTask<String, Void, String> {
 
-    private static final String API_LINK_BEGINNING = "https://api.nomics.com/v1/exchange-rates/history?key=";
-    // private static final String API_LINK_END = "&currency=BTC&start=2018-04-14T00%3A00%3A00Z&end=2018-05-14T00%3A00%3A00Z";
+    private static final String API_LINK_BEGINNING = "https://api.nomics.com/v1/currencies/sparkline?key=";
     private static final String API_KEY = "66d6fc35ed618c1fbf359c96d88b671c";
 
     private CurrencyFragment currencyFragment;
     private DataPoint[] dataPoints;
+    private List<String[]> datetimeValue;
     private GraphType type;
 
     public CurrencyHistoryAsync(CurrencyFragment fragment) {
@@ -50,13 +51,14 @@ public class CurrencyHistoryAsync extends AsyncTask<String, Void, String> {
         }
 
         //currencyFragment.updateGraph(dataPoints);
-        currencyFragment.updateData(dataPoints, type);
+        currencyFragment.updateData(dataPoints, type, datetimeValue);
     }
 
     @Override
     protected String doInBackground(String... strings) {
         // strings[0] - currency ("BTC","ETH","BSV","LTC")
         // strings[1] - type ("1D","1W","1M","3M","1Y","5Y")
+        datetimeValue = new ArrayList<>();
         String currency = strings[0];
         String typeStr = strings[1];
         switch (typeStr) {
@@ -83,14 +85,15 @@ public class CurrencyHistoryAsync extends AsyncTask<String, Void, String> {
 
         String url;
         String date;
-        Calendar cal = Calendar.getInstance();
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
         Date result;
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
         switch (type) {
             case DATA1D:
                 result = cal.getTime();
                 date = sdf.format(result);
-                url = API_LINK_BEGINNING + API_KEY + "&currency=" + currency + "&start=" + date + "T00%3A00%3A00Z";
+                url = API_LINK_BEGINNING + API_KEY + "&ids=" + currency + "&start=" + date + "T00%3A00%3A00Z";
                 try {
                     parseDataPoints(requestData(url));
                 } catch (JSONException e) {
@@ -101,26 +104,26 @@ public class CurrencyHistoryAsync extends AsyncTask<String, Void, String> {
                 break;
 
             case DATA1W:
-                List<DataPoint> tempDataPoints = new ArrayList<>();
-                DataPoint tempDataPoint;
+                List<DataPoint> tempDataPoints1W = new ArrayList<>();
+                DataPoint tempDataPoint1W;
                 for (int i = 0; i < 8; i++) {
-                    cal = Calendar.getInstance();
+                    cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
                     cal.add(Calendar.DATE, -7+i);
                     result = cal.getTime();
                     String startDate = sdf.format(result);
 
-                    cal = Calendar.getInstance();
+                    cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
                     cal.add(Calendar.DATE, -7+i+1);
                     result = cal.getTime();
                     String endDate = sdf.format(result);
-                    url = API_LINK_BEGINNING + API_KEY + "&currency=" + currency + "&start=" + startDate + "T00%3A00%3A00Z" + "&end=" + endDate + "T00%3A00%3A00Z";
+                    url = API_LINK_BEGINNING + API_KEY + "&ids=" + currency + "&start=" + startDate + "T00%3A00%3A00Z" + "&end=" + endDate + "T00%3A00%3A00Z";
                     try {
                         parseDataPoints(requestData(url));
                         for (int j = 0; j < dataPoints.length; j++){
                             double x = dataPoints[j].getX();
                             double y = dataPoints[j].getY();
-                            tempDataPoint = new DataPoint(x,y);
-                            tempDataPoints.add(tempDataPoint);
+                            tempDataPoint1W = new DataPoint(x,y);
+                            tempDataPoints1W.add(tempDataPoint1W);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -128,13 +131,15 @@ public class CurrencyHistoryAsync extends AsyncTask<String, Void, String> {
                         e.printStackTrace();
                     }
                 }
-                int toDelete = tempDataPoints.size() - 168;
-                for (int i = 0; i < toDelete; i++) {
-                    tempDataPoints.remove(0);
+                int toDelete1W = tempDataPoints1W.size() - 168;
+                toDelete1W = 0;
+                for (int i = 0; i < toDelete1W; i++) {
+                    tempDataPoints1W.remove(0);
+                    datetimeValue.remove(0);
                 }
-                dataPoints = new DataPoint[tempDataPoints.size()];
-                for (int i = 0; i < tempDataPoints.size(); i++) {
-                    double y = tempDataPoints.get(i).getY();
+                dataPoints = new DataPoint[tempDataPoints1W.size()];
+                for (int i = 0; i < tempDataPoints1W.size(); i++) {
+                    double y = tempDataPoints1W.get(i).getY();
                     dataPoints[i] = new DataPoint(i, y);
                 }
                 break;
@@ -143,7 +148,7 @@ public class CurrencyHistoryAsync extends AsyncTask<String, Void, String> {
                 cal.add(Calendar.MONTH, -1);
                 result = cal.getTime();
                 date = sdf.format(result);
-                url = API_LINK_BEGINNING + API_KEY + "&currency=" + currency + "&start=" + date + "T00%3A00%3A00Z";
+                url = API_LINK_BEGINNING + API_KEY + "&ids=" + currency + "&start=" + date + "T00%3A00%3A00Z";
                 try {
                     parseDataPoints(requestData(url));
                 } catch (JSONException e) {
@@ -157,7 +162,7 @@ public class CurrencyHistoryAsync extends AsyncTask<String, Void, String> {
                 cal.add(Calendar.MONTH, -3);
                 result = cal.getTime();
                 date = sdf.format(result);
-                url = API_LINK_BEGINNING + API_KEY + "&currency=" + currency + "&start=" + date + "T00%3A00%3A00Z";
+                url = API_LINK_BEGINNING + API_KEY + "&ids=" + currency + "&start=" + date + "T00%3A00%3A00Z";
                 try {
                     parseDataPoints(requestData(url));
                 } catch (JSONException e) {
@@ -171,7 +176,7 @@ public class CurrencyHistoryAsync extends AsyncTask<String, Void, String> {
                 cal.add(Calendar.YEAR, -1);
                 result = cal.getTime();
                 date = sdf.format(result);
-                url = API_LINK_BEGINNING + API_KEY + "&currency=" + currency + "&start=" + date + "T00%3A00%3A00Z";
+                url = API_LINK_BEGINNING + API_KEY + "&ids=" + currency + "&start=" + date + "T00%3A00%3A00Z";
                 try {
                     parseDataPoints(requestData(url));
                 } catch (JSONException e) {
@@ -185,7 +190,7 @@ public class CurrencyHistoryAsync extends AsyncTask<String, Void, String> {
                 cal.add(Calendar.YEAR, -5);
                 result = cal.getTime();
                 date = sdf.format(result);
-                url = API_LINK_BEGINNING + API_KEY + "&currency=" + currency + "&start=" + date + "T00%3A00%3A00Z";
+                url = API_LINK_BEGINNING + API_KEY + "&ids=" + currency + "&start=" + date + "T00%3A00%3A00Z";
                 try {
                     parseDataPoints(requestData(url));
                 } catch (JSONException e) {
@@ -218,10 +223,17 @@ public class CurrencyHistoryAsync extends AsyncTask<String, Void, String> {
 
     public void parseDataPoints(JSONArray json) {
         try {
-            dataPoints = new DataPoint[json.length()];
-            for (int i = 0; i < json.length(); i++) {
-                JSONObject data = json.getJSONObject(i);
-                dataPoints[i] = new DataPoint(i, data.getDouble("rate"));
+            JSONArray arrayPrices = json.getJSONObject(0).getJSONArray("prices");
+            JSONArray arrayTimestamp = json.getJSONObject(0).getJSONArray("timestamps");
+            dataPoints = new DataPoint[arrayPrices.length()];
+            for (int i = 0; i < arrayPrices.length(); i++) {
+                dataPoints[i] = new DataPoint(i, arrayPrices.getDouble(i));
+                String[] datetimeValuePair = new String[2];
+                String datetimeString = arrayTimestamp.getString(i);
+                datetimeValuePair[0] = datetimeString.substring(0,10) + " " +
+                        datetimeString.substring(11,13) +  ":" + datetimeString.substring(14,16) + "UTC";
+                datetimeValuePair[1] = arrayPrices.getString(i);
+                datetimeValue.add(datetimeValuePair);
             }
         } catch (JSONException e) {
             e.printStackTrace();
