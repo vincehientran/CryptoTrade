@@ -79,6 +79,7 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
     private List<String[]> datetimeValues1Y;
     private List<String[]> datetimeValues5Y;
     private List<String[]> datetimeValues;
+    private WebSocket ws;
 
     public CurrencyFragment() {
         // Required empty public constructor
@@ -177,6 +178,16 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
 
 
         return view;
+    }
+
+    @Override
+    public void onPause() {
+        ws.send("{\n" +
+                "    \"type\": \"unsubscribe\",\n" +
+                "    \"channels\": [\"ticker\"]\n" +
+                "}");
+
+        super.onPause();
     }
 
     @Override
@@ -344,7 +355,7 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
     private void startWS() {
         Request request = new Request.Builder().url("wss://ws-feed.pro.coinbase.com").build();
         EchoWebSocketListener listener = new EchoWebSocketListener();
-        WebSocket ws = client.newWebSocket(request, listener);
+        ws = client.newWebSocket(request, listener);
 
         client.dispatcher().executorService().shutdown();
     }
