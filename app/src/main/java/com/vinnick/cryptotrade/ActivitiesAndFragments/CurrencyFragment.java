@@ -66,6 +66,11 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
     private TextView textViewCirculatingSupply;
     private TextView textViewDelta;
     private TextView textViewGraphType;
+    private TextView textView1Do;
+    private TextView textView1Dh;
+    private TextView textView1Dl;
+    private TextView textView52Wh;
+    private TextView textView52Wl;
 
     private String currency;
     private LineGraphSeries<DataPoint> graphSeries;
@@ -133,6 +138,11 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
         textViewCirculatingSupply = view.findViewById(R.id.textView_currency_circulating_supply);
         textViewDelta = view.findViewById(R.id.textView_currrency_delta);
         textViewGraphType = view.findViewById(R.id.textView_currency_graphtype);
+        textView1Do = view.findViewById(R.id.textView_currency_1do);
+        textView1Dh = view.findViewById(R.id.textView_currency_1dh);
+        textView1Dl = view.findViewById(R.id.textView_currency_1dl);
+        textView52Wh = view.findViewById(R.id.textView_currency_52wh);
+        textView52Wl = view.findViewById(R.id.textView_currency_52wl);
 
         price = -1;
 
@@ -182,16 +192,12 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
 
         client = new OkHttpClient();
 
-
         new Thread() {
             @Override
             public void run(){
                 startWS();
             }
         }.start();
-
-        new CurrencyInfoAsync(this).execute(currency);
-
 
         return view;
     }
@@ -249,9 +255,9 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
             String deltaStr = "";
             double delta = price - open;
             if (delta < 0) {
-                deltaStr += "-$";
+                deltaStr += "- $";
             } else {
-                deltaStr += "+$";
+                deltaStr += "+ $";
             }
 
             if (delta > 10) {
@@ -276,6 +282,7 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
         new CurrencyHistoryAsync(this).execute(currency, "3M");
         new CurrencyHistoryAsync(this).execute(currency, "1Y");
         new CurrencyHistoryAsync(this).execute(currency, "5Y");
+        new CurrencyInfoAsync(this).execute(currency);
     }
 
     public void updateGraph() {
@@ -331,6 +338,18 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
             case DATA1D:
                 dataPoints1D = data;
                 datetimeValues1D = datetimeValues;
+
+                // find Today's High/Low
+                graphSeries.resetData(dataPoints1D);
+                double low1d = graph.getViewport().getMinY(true);
+                double high1d = graph.getViewport().getMaxY(true);
+                double open1d = dataPoints1D[0].getY();
+                String low1dStr = String.format("%.2f", low1d);
+                String high1dStr = String.format("%.2f", high1d);
+                String open1dStr = String.format("%.2f", open1d);
+                textView1Dh.setText(high1dStr);
+                textView1Dl.setText(low1dStr);
+                textView1Do.setText(open1dStr);
                 break;
             case DATA1W:
                 dataPoints1W = data;
@@ -347,6 +366,15 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
             case DATA1Y:
                 dataPoints1Y = data;
                 datetimeValues1Y = datetimeValues;
+
+                // find 52 wk High/Low
+                graphSeries.resetData(dataPoints1Y);
+                double low52w = graph.getViewport().getMinY(true);
+                double high52w = graph.getViewport().getMaxY(true);
+                String low52wStr = String.format("%.2f", low52w);
+                String high52wStr = String.format("%.2f", high52w);
+                textView52Wh.setText(high52wStr);
+                textView52Wl.setText(low52wStr);
                 break;
             case DATA5Y:
                 dataPoints5Y = data;
@@ -451,10 +479,10 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
                 double delta = price - open;
                 String deltaStr = "";
                 if (delta < 0) {
-                    deltaStr += "-";
+                    deltaStr += "- $";
                 }
                 else {
-                    deltaStr += "+";
+                    deltaStr += "+ $";
                 }
 
                 if (delta > 10) {
