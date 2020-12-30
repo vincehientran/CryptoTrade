@@ -28,9 +28,9 @@ public class CurrencyInfoAsync extends AsyncTask<String, Void, String> {
     private String url;
 
     private String name;
-    private int circulatingSupply;
-    private int maxSupply;
-    private int marketCap;
+    private String circulatingSupply;
+    private String maxSupply;
+    private String marketCap;
 
     public CurrencyInfoAsync(CurrencyFragment fragment) {
         currencyFragment = fragment;
@@ -79,10 +79,32 @@ public class CurrencyInfoAsync extends AsyncTask<String, Void, String> {
         try {
             JSONObject obj = json.getJSONObject(0);
             name = obj.getString("name");
-            circulatingSupply = obj.getInt("circulating_supply");
-            maxSupply = obj.getInt("max_supply");
-            marketCap = obj.getInt("market_cap");
         } catch (JSONException e) {
+            name = "N/A";
+            e.printStackTrace();
+        }
+
+        try {
+            JSONObject obj = json.getJSONObject(0);
+            circulatingSupply = obj.getString("circulating_supply");
+        } catch (JSONException e) {
+            circulatingSupply = "N/A";
+            e.printStackTrace();
+        }
+
+        try {
+            JSONObject obj = json.getJSONObject(0);
+            maxSupply = obj.getString("max_supply");
+        } catch (JSONException e) {
+            maxSupply = "N/A";
+            e.printStackTrace();
+        }
+
+        try {
+            JSONObject obj = json.getJSONObject(0);
+            marketCap = obj.getString("market_cap");
+        } catch (JSONException e) {
+            marketCap = "N/A";
             e.printStackTrace();
         }
 

@@ -129,7 +129,7 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
         textViewMaxSupply = view.findViewById(R.id.textView_currency_max_supply);
         textViewCirculatingSupply = view.findViewById(R.id.textView_currency_circulating_supply);
 
-        currency = "BTC";
+        currency = "DOGE";
 
         graph = (GraphView) view.findViewById(R.id.graph_currency);
         graphSeries = new LineGraphSeries<>(new DataPoint[0]);
@@ -383,10 +383,10 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
         });
     }
 
-    public void updateInfo(String name, int circulatingSupply, int maxSupply, int marketCap) {
-        textViewMarketCap.setText(marketCap + "");
-        textViewCirculatingSupply.setText(circulatingSupply + "");
-        textViewMaxSupply.setText(maxSupply + "");
+    public void updateInfo(String name, String circulatingSupply, String maxSupply, String marketCap) {
+        textViewMarketCap.setText(marketCap);
+        textViewCirculatingSupply.setText(circulatingSupply);
+        textViewMaxSupply.setText(maxSupply);
         textViewCurrency.setText(name);
     }
 
