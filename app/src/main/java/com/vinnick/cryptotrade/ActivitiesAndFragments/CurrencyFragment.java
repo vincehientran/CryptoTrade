@@ -129,7 +129,7 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
         textViewMaxSupply = view.findViewById(R.id.textView_currency_max_supply);
         textViewCirculatingSupply = view.findViewById(R.id.textView_currency_circulating_supply);
 
-        currency = "DOGE";
+        currency = "BTC";
 
         graph = (GraphView) view.findViewById(R.id.graph_currency);
         graphSeries = new LineGraphSeries<>(new DataPoint[0]);
