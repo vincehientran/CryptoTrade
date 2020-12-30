@@ -1,4 +1,4 @@
-package CryptoTrade;
+package com.vinnick.cryptotrade;
 
 import java.util.HashMap;
 

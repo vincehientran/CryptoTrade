@@ -195,6 +195,7 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
         switch (v.getId()) {
             case R.id.button_currency_1d:
                 type = GraphType.DATA1D;
+                new CurrencyHistoryAsync(this).execute(currency, "1D");
                 break;
             case R.id.button_currency_1w:
                 type = GraphType.DATA1W;
@@ -327,7 +328,12 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
                 if (type.equals("ticker")) {
                     String priceStr = json.getString("price");
                     if (priceStr.contains(".")) {
-                        updateTextViewPrice(priceStr);
+                        if (priceStr.indexOf('.') == priceStr.length() - 2){
+                            updateTextViewPrice(priceStr + "0");
+                        }
+                        else {
+                            updateTextViewPrice(priceStr);
+                        }
                     }
                     else {
                         updateTextViewPrice(priceStr + ".00");
