@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GridLabelRenderer;
@@ -18,8 +17,8 @@ import com.jjoe64.graphview.series.DataPointInterface;
 import com.jjoe64.graphview.series.LineGraphSeries;
 import com.jjoe64.graphview.series.OnDataPointTapListener;
 import com.jjoe64.graphview.series.Series;
-import com.vinnick.cryptotrade.CurrencyHistoryAsync;
-import com.vinnick.cryptotrade.CurrencyInfoAsync;
+import com.vinnick.cryptotrade.Asyncs.CurrencyHistoryAsync;
+import com.vinnick.cryptotrade.Asyncs.CurrencyInfoAsync;
 import com.vinnick.cryptotrade.GraphType;
 import com.vinnick.cryptotrade.R;
 

@@ -1,4 +1,4 @@
-package com.vinnick.cryptotrade;
+package com.vinnick.cryptotrade.Asyncs;
 
 import android.os.AsyncTask;
 

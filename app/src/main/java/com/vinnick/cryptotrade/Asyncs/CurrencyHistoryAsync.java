@@ -1,9 +1,10 @@
-package com.vinnick.cryptotrade;
+package com.vinnick.cryptotrade.Asyncs;
 
 import android.os.AsyncTask;
 
 import com.jjoe64.graphview.series.DataPoint;
 import com.vinnick.cryptotrade.ActivitiesAndFragments.CurrencyFragment;
+import com.vinnick.cryptotrade.GraphType;
 
 import org.json.JSONArray;
 import org.json.JSONException;
