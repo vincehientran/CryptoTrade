@@ -19,6 +19,7 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 import com.jjoe64.graphview.series.OnDataPointTapListener;
 import com.jjoe64.graphview.series.Series;
 import com.vinnick.cryptotrade.CurrencyHistoryAsync;
+import com.vinnick.cryptotrade.CurrencyInfoAsync;
 import com.vinnick.cryptotrade.GraphType;
 import com.vinnick.cryptotrade.R;
 
@@ -61,6 +62,9 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
     private TextView textViewCurrency;
     private TextView textViewDatetime;
     private TextView textViewValue;
+    private TextView textViewMarketCap;
+    private TextView textViewMaxSupply;
+    private TextView textViewCirculatingSupply;
 
     private String currency;
     private LineGraphSeries<DataPoint> graphSeries;
@@ -122,6 +126,9 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
         textViewCurrency = view.findViewById(R.id.textView_currency_title);
         textViewDatetime = view.findViewById(R.id.textView_currency_datetime);
         textViewValue = view.findViewById(R.id.textView_currency_value);
+        textViewMarketCap = view.findViewById(R.id.textView_currency_market_cap);
+        textViewMaxSupply = view.findViewById(R.id.textView_currency_max_supply);
+        textViewCirculatingSupply = view.findViewById(R.id.textView_currency_circulating_supply);
 
         currency = "BTC";
 
@@ -175,6 +182,8 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
                 startWS();
             }
         }.start();
+
+        new CurrencyInfoAsync(this).execute(currency);
 
 
         return view;
@@ -373,6 +382,13 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
                 textViewPrice.setText("$" + txt);
             }
         });
+    }
+
+    public void updateInfo(String name, int circulatingSupply, int maxSupply, int marketCap) {
+        textViewMarketCap.setText(marketCap + "");
+        textViewCirculatingSupply.setText(circulatingSupply + "");
+        textViewMaxSupply.setText(maxSupply + "");
+        textViewCurrency.setText(name);
     }
 
 }
