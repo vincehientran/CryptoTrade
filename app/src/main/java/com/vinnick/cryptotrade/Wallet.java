@@ -1,5 +1,8 @@
 package com.vinnick.cryptotrade;
-
+/**
+ * Made by Pearleen Tran Dec, 2020
+ * Keeps track of a user's wallet
+ **/
 import java.util.HashMap;
 
 public class Wallet {
