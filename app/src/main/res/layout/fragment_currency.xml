@@ -26,9 +26,10 @@
             android:id="@+id/graph_currency"
             android:layout_width="match_parent"
             android:layout_height="300dip"
+            android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_currency_price" />
+            app:layout_constraintTop_toBottomOf="@+id/textView_currrency_delta" />
 
         <LinearLayout
             android:id="@+id/row1"
@@ -199,6 +200,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Today's Open"
+            android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@+id/guideline4"
             app:layout_constraintTop_toTopOf="@+id/textView5" />
 
@@ -206,18 +208,19 @@
             android:id="@+id/textView5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:text="Today's High"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/textView12"
             app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
         <TextView
             android:id="@+id/textView6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="32dp"
             android:text="Today's Low"
+            android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@+id/textView5"
             app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
@@ -225,8 +228,9 @@
             android:id="@+id/textView7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="32dp"
             android:text="52 Wk High"
+            android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@+id/textView6"
             app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
@@ -234,8 +238,9 @@
             android:id="@+id/textView8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="32dp"
             android:text="52 Wk Low"
+            android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@+id/textView7"
             app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
@@ -244,6 +249,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Circulating Supply"
+            android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@+id/textView4"
             app:layout_constraintTop_toTopOf="@+id/textView6" />
 
@@ -252,6 +258,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Max Supply"
+            android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@+id/textView9"
             app:layout_constraintTop_toTopOf="@+id/textView7" />
 
@@ -260,6 +267,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Market Cap"
+            android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@+id/textView10"
             app:layout_constraintTop_toTopOf="@+id/textView8" />
 
@@ -274,12 +282,27 @@
             android:id="@+id/textView12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="32dp"
             android:text="Statistics"
             android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/row1" />
+
+        <TextView
+            android:id="@+id/textView_currrency_delta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@+id/textView_currency_price"
+            app:layout_constraintTop_toBottomOf="@+id/textView_currency_price" />
+
+        <TextView
+            android:id="@+id/textView_currency_graphtype"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            app:layout_constraintStart_toEndOf="@+id/textView_currrency_delta"
+            app:layout_constraintTop_toTopOf="@+id/textView_currrency_delta" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

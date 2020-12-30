@@ -64,6 +64,8 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
     private TextView textViewMarketCap;
     private TextView textViewMaxSupply;
     private TextView textViewCirculatingSupply;
+    private TextView textViewDelta;
+    private TextView textViewGraphType;
 
     private String currency;
     private LineGraphSeries<DataPoint> graphSeries;
@@ -83,6 +85,7 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
     private List<String[]> datetimeValues5Y;
     private List<String[]> datetimeValues;
     private WebSocket ws;
+    private double price;
 
     public CurrencyFragment() {
         // Required empty public constructor
@@ -128,6 +131,10 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
         textViewMarketCap = view.findViewById(R.id.textView_currency_market_cap);
         textViewMaxSupply = view.findViewById(R.id.textView_currency_max_supply);
         textViewCirculatingSupply = view.findViewById(R.id.textView_currency_circulating_supply);
+        textViewDelta = view.findViewById(R.id.textView_currrency_delta);
+        textViewGraphType = view.findViewById(R.id.textView_currency_graphtype);
+
+        price = -1;
 
         currency = "BTC";
 
@@ -169,6 +176,7 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
         dataPoints1Y = new DataPoint[0];
         dataPoints5Y = new DataPoint[0];
         type = GraphType.DATA1D;
+        textViewGraphType.setText("Today");
 
         loadData();
 
@@ -200,27 +208,64 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
+        double open;
         switch (v.getId()) {
             case R.id.button_currency_1d:
                 type = GraphType.DATA1D;
                 new CurrencyHistoryAsync(this).execute(currency, "1D");
+                textViewGraphType.setText("Today");
+                open = dataPoints1D[0].getY();
                 break;
             case R.id.button_currency_1w:
                 type = GraphType.DATA1W;
+                textViewGraphType.setText("Past Week");
+                open = dataPoints1W[0].getY();
                 break;
             case R.id.button_currency_1m:
                 type = GraphType.DATA1M;
+                textViewGraphType.setText("Past Month");
+                open = dataPoints1M[0].getY();
                 break;
             case R.id.button_currency_3m:
                 type = GraphType.DATA3M;
+                textViewGraphType.setText("Past 3 Months");
+                open = dataPoints3M[0].getY();
                 break;
             case R.id.button_currency_1y:
                 type = GraphType.DATA1Y;
+                textViewGraphType.setText("Past Year");
+                open = dataPoints1Y[0].getY();
                 break;
             case R.id.button_currency_5y:
                 type = GraphType.DATA5Y;
+                textViewGraphType.setText("Past 5 Years");
+                open = dataPoints5Y[0].getY();
                 break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + v.getId());
         }
+
+        if (price >= 0) {
+            String deltaStr = "";
+            double delta = price - open;
+            if (delta < 0) {
+                deltaStr += "-$";
+            } else {
+                deltaStr += "+$";
+            }
+
+            if (delta > 10) {
+                deltaStr += String.format("%.2f", delta);
+            } else {
+                deltaStr += String.format("%.3f", delta);
+            }
+
+            double percentDelta = (delta/open) * 100;
+            String percentDeltaStr = "  (" + String.format("%.2f", percentDelta) + "%)";
+            String textViewDeltaStr = deltaStr + percentDeltaStr;
+            textViewDelta.setText(textViewDeltaStr);
+        }
+
         updateGraph();
     }
 
@@ -379,6 +424,50 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
             @Override
             public void run() {
                 textViewPrice.setText("$" + txt);
+                price = Double.parseDouble(txt);
+                double open;
+                switch (type) {
+                    case DATA1D:
+                        open = dataPoints1D[0].getY();
+                        break;
+                    case DATA1W:
+                        open = dataPoints1W[0].getY();
+                        break;
+                    case DATA1M:
+                        open = dataPoints1M[0].getY();
+                        break;
+                    case DATA3M:
+                        open = dataPoints3M[0].getY();
+                        break;
+                    case DATA1Y:
+                        open = dataPoints1Y[0].getY();
+                        break;
+                    case DATA5Y:
+                        open = dataPoints5Y[0].getY();
+                        break;
+                    default:
+                        throw new IllegalStateException("Unexpected value: " + type);
+                }
+                double delta = price - open;
+                String deltaStr = "";
+                if (delta < 0) {
+                    deltaStr += "-";
+                }
+                else {
+                    deltaStr += "+";
+                }
+
+                if (delta > 10) {
+                    deltaStr += String.format("%.2f", delta);
+                }
+                else {
+                    deltaStr += String.format("%.3f", delta);
+                }
+
+                double percentDelta = (delta/open) * 100;
+                String percentDeltaStr = "  (" + String.format("%.2f", percentDelta) + "%)";
+                String textViewDeltaStr = deltaStr + percentDeltaStr;
+                textViewDelta.setText(textViewDeltaStr);
             }
         });
     }
