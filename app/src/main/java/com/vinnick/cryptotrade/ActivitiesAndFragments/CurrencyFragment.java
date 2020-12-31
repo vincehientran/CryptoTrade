@@ -486,13 +486,13 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
                 }
 
                 if (delta > 10) {
-                    deltaStr += String.format("%.2f", delta);
+                    deltaStr += String.format("%.2f", Math.abs(delta));
                 }
                 else {
-                    deltaStr += String.format("%.3f", delta);
+                    deltaStr += String.format("%.3f", Math.abs(delta));
                 }
 
-                double percentDelta = (delta/open) * 100;
+                double percentDelta = Math.abs((delta/open) * 100);
                 String percentDeltaStr = "  (" + String.format("%.2f", percentDelta) + "%)";
                 String textViewDeltaStr = deltaStr + percentDeltaStr;
                 textViewDelta.setText(textViewDeltaStr);
