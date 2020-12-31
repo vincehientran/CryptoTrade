@@ -160,16 +160,43 @@ public class CurrencyHistoryAsync extends AsyncTask<String, Void, String> {
                 break;
 
             case DATA3M:
-                cal.add(Calendar.MONTH, -3);
-                result = cal.getTime();
-                date = sdf.format(result);
-                url = API_LINK_BEGINNING + API_KEY + "&ids=" + currency + "&start=" + date + "T00%3A00%3A00Z";
-                try {
-                    parseDataPoints(requestData(url));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                List<DataPoint> tempDataPoints3M = new ArrayList<>();
+                DataPoint tempDataPoint3M;
+                for (int i = 0; i < 3; i++) {
+                    cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+                    cal.add(Calendar.MONTH, -3+i);
+                    result = cal.getTime();
+                    String startDate = sdf.format(result);
+
+                    cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+                    cal.add(Calendar.MONTH, -3+i+1);
+                    result = cal.getTime();
+                    String endDate = sdf.format(result);
+                    url = API_LINK_BEGINNING + API_KEY + "&ids=" + currency + "&start=" + startDate + "T00%3A00%3A00Z" + "&end=" + endDate + "T00%3A00%3A00Z";
+                    try {
+                        parseDataPoints(requestData(url));
+                        for (int j = 0; j < dataPoints.length; j++){
+                            double x = dataPoints[j].getX();
+                            double y = dataPoints[j].getY();
+                            tempDataPoint3M = new DataPoint(x,y);
+                            tempDataPoints3M.add(tempDataPoint3M);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                int toDelete3M = tempDataPoints3M.size() - 168;
+                toDelete3M = 0;
+                for (int i = 0; i < toDelete3M; i++) {
+                    tempDataPoints3M.remove(0);
+                    datetimeValue.remove(0);
+                }
+                dataPoints = new DataPoint[tempDataPoints3M.size()];
+                for (int i = 0; i < tempDataPoints3M.size(); i++) {
+                    double y = tempDataPoints3M.get(i).getY();
+                    dataPoints[i] = new DataPoint(i, y);
                 }
                 break;
 

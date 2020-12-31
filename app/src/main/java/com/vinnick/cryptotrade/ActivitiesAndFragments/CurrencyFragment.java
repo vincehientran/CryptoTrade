@@ -146,7 +146,7 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
 
         price = -1;
 
-        currency = "BTC";
+        currency = "ATOM";
 
         graph = (GraphView) view.findViewById(R.id.graph_currency);
         graphSeries = new LineGraphSeries<>(new DataPoint[0]);
@@ -214,44 +214,74 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-        double open;
+        double open = -1;
         switch (v.getId()) {
             case R.id.button_currency_1d:
-                type = GraphType.DATA1D;
-                new CurrencyHistoryAsync(this).execute(currency, "1D");
-                textViewGraphType.setText("Today");
-                open = dataPoints1D[0].getY();
+                if (dataPoints1D.length != 0) {
+                    type = GraphType.DATA1D;
+                    new CurrencyHistoryAsync(this).execute(currency, "1D");
+                    textViewGraphType.setText("Today");
+                    open = dataPoints1D[0].getY();
+                }
+                else {
+                    return;
+                }
                 break;
             case R.id.button_currency_1w:
-                type = GraphType.DATA1W;
-                textViewGraphType.setText("Past Week");
-                open = dataPoints1W[0].getY();
+                if (dataPoints1W.length != 0) {
+                    type = GraphType.DATA1W;
+                    textViewGraphType.setText("Past Week");
+                    open = dataPoints1W[0].getY();
+                }
+                else {
+                    return;
+                }
                 break;
             case R.id.button_currency_1m:
-                type = GraphType.DATA1M;
-                textViewGraphType.setText("Past Month");
-                open = dataPoints1M[0].getY();
+                if (dataPoints1M.length != 0) {
+                    type = GraphType.DATA1M;
+                    textViewGraphType.setText("Past Month");
+                    open = dataPoints1M[0].getY();
+                }
+                else {
+                    return;
+                }
                 break;
             case R.id.button_currency_3m:
-                type = GraphType.DATA3M;
-                textViewGraphType.setText("Past 3 Months");
-                open = dataPoints3M[0].getY();
+                if (dataPoints3M.length != 0) {
+                    type = GraphType.DATA3M;
+                    textViewGraphType.setText("Past 3 Months");
+                    open = dataPoints3M[0].getY();
+                }
+                else {
+                    return;
+                }
                 break;
             case R.id.button_currency_1y:
-                type = GraphType.DATA1Y;
-                textViewGraphType.setText("Past Year");
-                open = dataPoints1Y[0].getY();
+                if (dataPoints1Y.length != 0) {
+                    type = GraphType.DATA1Y;
+                    textViewGraphType.setText("Past Year");
+                    open = dataPoints1Y[0].getY();
+                }
+                else {
+                    return;
+                }
                 break;
             case R.id.button_currency_5y:
-                type = GraphType.DATA5Y;
-                textViewGraphType.setText("Past 5 Years");
-                open = dataPoints5Y[0].getY();
+                if (dataPoints5Y.length != 0) {
+                    type = GraphType.DATA5Y;
+                    textViewGraphType.setText("Past 5 Years");
+                    open = dataPoints5Y[0].getY();
+                }
+                else {
+                    return;
+                }
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + v.getId());
         }
 
-        if (price >= 0) {
+        if (price >= 0 && open >= 0) {
             String deltaStr = "";
             double delta = price - open;
             if (delta < 0) {
@@ -261,18 +291,17 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
             }
 
             if (delta > 10) {
-                deltaStr += String.format("%.2f", delta);
+                deltaStr += String.format("%.2f", Math.abs(delta));
             } else {
-                deltaStr += String.format("%.3f", delta);
+                deltaStr += String.format("%.3f", Math.abs(delta));
             }
 
-            double percentDelta = (delta/open) * 100;
+            double percentDelta = Math.abs((delta/open) * 100);
             String percentDeltaStr = "  (" + String.format("%.2f", percentDelta) + "%)";
             String textViewDeltaStr = deltaStr + percentDeltaStr;
             textViewDelta.setText(textViewDeltaStr);
+            updateGraph();
         }
-
-        updateGraph();
     }
 
     private void loadData() {
@@ -290,31 +319,48 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
         graph.getViewport().setYAxisBoundsManual(true);
         switch (type) {
             case DATA1D:
+                if (dataPoints1D.length == 0){
+                    return;
+                }
                 graphSeries.resetData(dataPoints1D);
                 datetimeValues = datetimeValues1D;
                 break;
             case DATA1W:
+                if (dataPoints1W.length == 0){
+                    return;
+                }
                 graphSeries.resetData(dataPoints1W);
                 datetimeValues = datetimeValues1W;
                 break;
             case DATA1M:
+                if (dataPoints1M.length == 0){
+                    return;
+                }
                 graphSeries.resetData(dataPoints1M);
                 datetimeValues = datetimeValues1M;
                 break;
             case DATA3M:
+                if (dataPoints3M.length == 0){
+                    return;
+                }
                 graphSeries.resetData(dataPoints3M);
                 datetimeValues = datetimeValues3M;
                 break;
             case DATA1Y:
+                if (dataPoints1Y.length == 0){
+                    return;
+                }
                 graphSeries.resetData(dataPoints1Y);
                 datetimeValues = datetimeValues1Y;
                 break;
             case DATA5Y:
+                if (dataPoints5Y.length == 0){
+                    return;
+                }
                 graphSeries.resetData(dataPoints5Y);
                 datetimeValues = datetimeValues5Y;
                 break;
         }
-
 
         double maxX = graph.getViewport().getMaxX(true);
         double maxY = graph.getViewport().getMaxY(true);
