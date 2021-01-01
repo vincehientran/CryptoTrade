@@ -146,7 +146,7 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
 
         price = -1;
 
-        currency = "ATOM";
+        currency = "XRP";
 
         graph = (GraphView) view.findViewById(R.id.graph_currency);
         graphSeries = new LineGraphSeries<>(new DataPoint[0]);
@@ -475,12 +475,6 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
         @Override
         public void onClosing(WebSocket webSocket, int code, String reason) {
             webSocket.close(NORMAL_CLOSURE_STATUS, null);
-            updateTextViewPrice("Closing : " + code + " / " + reason);
-        }
-
-        @Override
-        public void onFailure(WebSocket webSocket, Throwable t, Response response) {
-            updateTextViewPrice("Error : " + t.getMessage());
         }
     }
 

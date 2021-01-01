@@ -38,7 +38,11 @@ public class CurrencyInfoAsync extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String s) {
-        currencyFragment.updateInfo(name, circulatingSupply, maxSupply, marketCap);
+
+        // this is for when requestData(url) gives an error
+        if (name != null && circulatingSupply != null && maxSupply != null && marketCap != null) {
+            currencyFragment.updateInfo(name, circulatingSupply, maxSupply, marketCap);
+        }
     }
 
 
@@ -81,7 +85,6 @@ public class CurrencyInfoAsync extends AsyncTask<String, Void, String> {
             name = obj.getString("name");
         } catch (JSONException e) {
             name = "N/A";
-            e.printStackTrace();
         }
 
         try {
@@ -89,7 +92,6 @@ public class CurrencyInfoAsync extends AsyncTask<String, Void, String> {
             circulatingSupply = obj.getString("circulating_supply");
         } catch (JSONException e) {
             circulatingSupply = "N/A";
-            e.printStackTrace();
         }
 
         try {
@@ -97,7 +99,6 @@ public class CurrencyInfoAsync extends AsyncTask<String, Void, String> {
             maxSupply = obj.getString("max_supply");
         } catch (JSONException e) {
             maxSupply = "N/A";
-            e.printStackTrace();
         }
 
         try {
@@ -105,7 +106,6 @@ public class CurrencyInfoAsync extends AsyncTask<String, Void, String> {
             marketCap = obj.getString("market_cap");
         } catch (JSONException e) {
             marketCap = "N/A";
-            e.printStackTrace();
         }
 
     }
