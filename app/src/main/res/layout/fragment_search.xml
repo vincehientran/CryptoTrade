@@ -17,12 +17,36 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/button_BTC"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button"
+        android:text="BTC"
         app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button_LTC"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="LTC"
+        app:layout_constraintStart_toStartOf="@+id/button_BTC"
+        app:layout_constraintTop_toBottomOf="@+id/button_BTC" />
+
+    <Button
+        android:id="@+id/button_ETH"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ETH"
+        app:layout_constraintStart_toStartOf="@+id/button_LTC"
+        app:layout_constraintTop_toBottomOf="@+id/button_LTC" />
+
+    <Button
+        android:id="@+id/button_XRP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="XRP"
+        app:layout_constraintStart_toStartOf="@+id/button_ETH"
+        app:layout_constraintTop_toBottomOf="@+id/button_ETH" />
 </androidx.constraintlayout.widget.ConstraintLayout>

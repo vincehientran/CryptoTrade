@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity{
         transaction.commit();
 
         text = findViewById(R.id.textView3);
-        button = findViewById(R.id.button);
+        button = findViewById(R.id.button_BTC);
 
     }
 

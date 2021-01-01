@@ -29,7 +29,10 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
     private String mParam1;
     private String mParam2;
 
-    private Button button;
+    private Button buttonBTC;
+    private Button buttonLTC;
+    private Button buttonETH;
+    private Button buttonXRP;
     private View view;
 
     public SearchFragment() {
@@ -68,8 +71,15 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
 
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_search, container, false);
-        button = (Button) view.findViewById(R.id.button);
-        button.setOnClickListener(this);
+        buttonBTC = (Button) view.findViewById(R.id.button_BTC);
+        buttonBTC.setOnClickListener(this);
+        buttonLTC = (Button) view.findViewById(R.id.button_LTC);
+        buttonLTC.setOnClickListener(this);
+        buttonETH = (Button) view.findViewById(R.id.button_ETH);
+        buttonETH.setOnClickListener(this);
+        buttonXRP = (Button) view.findViewById(R.id.button_XRP);
+        buttonXRP.setOnClickListener(this);
+
         return view;
 
     }
@@ -77,14 +87,26 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.button:
-                goToCurrencyFragment();
+            case R.id.button_BTC:
+                goToCurrencyFragment("BTC");
+                break;
+            case R.id.button_LTC:
+                goToCurrencyFragment("LTC");
+                break;
+            case R.id.button_ETH:
+                goToCurrencyFragment("ETH");
+                break;
+            case R.id.button_XRP:
+                goToCurrencyFragment("XRP");
                 break;
         }
     }
 
-    public void goToCurrencyFragment(){
+    public void goToCurrencyFragment(String currency){
+        Bundle bundle = new Bundle();
+        bundle.putString("currency", currency);
         Fragment fragment = new CurrencyFragment();
+        fragment.setArguments(bundle);
         FragmentManager fm = getFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
         transaction.replace(R.id.contentFragment, fragment);

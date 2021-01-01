@@ -48,9 +48,7 @@ public class CurrencyHistoryAsync extends AsyncTask<String, Void, String> {
                     new DataPoint(3, 5),
                     new DataPoint(4, 5)
             };
-
         }
-
         //currencyFragment.updateGraph(dataPoints);
         currencyFragment.updateData(dataPoints, type, datetimeValue);
     }

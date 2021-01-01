@@ -120,6 +120,7 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+            currency = getArguments().getString("currency");
         }
 
     }
@@ -145,8 +146,6 @@ public class CurrencyFragment extends Fragment implements View.OnClickListener{
         textView52Wl = view.findViewById(R.id.textView_currency_52wl);
 
         price = -1;
-
-        currency = "XRP";
 
         graph = (GraphView) view.findViewById(R.id.graph_currency);
         graphSeries = new LineGraphSeries<>(new DataPoint[0]);
