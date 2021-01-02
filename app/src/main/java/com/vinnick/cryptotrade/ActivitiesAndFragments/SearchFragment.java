@@ -124,6 +124,12 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
             case R.id.button_XRP:
                 goToCurrencyFragment("XRP");
                 break;
+            default:
+                int pos = recyclerView.getChildLayoutPosition(v);
+                CryptoName cryptoName = cryptoNameList.get(pos);
+                goToCurrencyFragment(cryptoName.getSymbol());
+                break;
+
         }
     }
 
