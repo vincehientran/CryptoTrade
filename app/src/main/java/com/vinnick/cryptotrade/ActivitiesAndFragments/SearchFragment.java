@@ -5,13 +5,20 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.vinnick.cryptotrade.CryptoHolderAdapter;
+import com.vinnick.cryptotrade.CryptoName;
 import com.vinnick.cryptotrade.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,6 +41,10 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
     private Button buttonETH;
     private Button buttonXRP;
     private View view;
+    private RecyclerView recyclerView;
+
+    private CryptoHolderAdapter adapter;
+    private final List<CryptoName> cryptoNameList = new ArrayList<>();
 
     public SearchFragment() {
         // Required empty public constructor
@@ -79,6 +90,20 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
         buttonETH.setOnClickListener(this);
         buttonXRP = (Button) view.findViewById(R.id.button_XRP);
         buttonXRP.setOnClickListener(this);
+
+        cryptoNameList.add(new CryptoName("Bitcoin","BTC"));
+        cryptoNameList.add(new CryptoName("Litecoin","LTC"));
+        cryptoNameList.add(new CryptoName("Bitcoin SV","BSV"));
+        cryptoNameList.add(new CryptoName("Bitcoin Cash","BCH"));
+        cryptoNameList.add(new CryptoName("Ethereum","ETH"));
+        cryptoNameList.add(new CryptoName("Ethereum Classic","ETC"));
+        cryptoNameList.add(new CryptoName("Dogecoin","DOGE"));
+        cryptoNameList.add(new CryptoName("Ripple","XRP"));
+
+        recyclerView = view.findViewById(R.id.recyclerView_search);
+        adapter = new CryptoHolderAdapter(cryptoNameList, this);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
         return view;
 
