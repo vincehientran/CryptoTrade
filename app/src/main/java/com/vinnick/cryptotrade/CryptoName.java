@@ -17,4 +17,13 @@ public class CryptoName {
     public String getSymbol() {
         return symbol;
     }
+
+    public boolean match(String text) {
+        if (name.toLowerCase().contains(text.toLowerCase()) || symbol.toLowerCase().contains(text.toLowerCase())) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package com.vinnick.cryptotrade.ActivitiesAndFragments;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,7 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.vinnick.cryptotrade.Asyncs.CryptoNameAsync;
@@ -39,11 +42,13 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
     private String mParam2;
 
     private Button buttonSearch;
+    private EditText editTextSearch;
     private View view;
     private RecyclerView recyclerView;
 
     private CryptoHolderAdapter adapter;
     private List<CryptoName> cryptoNameList = new ArrayList<>();
+    private List<CryptoName> cryptoNameListPermanentStored = new ArrayList<>();
 
     public SearchFragment() {
         // Required empty public constructor
@@ -84,6 +89,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
         buttonSearch = (Button) view.findViewById(R.id.button_search_search);
         buttonSearch.setOnClickListener(this);
 
+        editTextSearch = view.findViewById(R.id.editText_search_search);
+
         new CryptoNameAsync(this).execute();
 
         recyclerView = view.findViewById(R.id.recyclerView_search);
@@ -99,7 +106,31 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_search_search:
+                cryptoNameList.clear();
+                cryptoNameList.addAll(cryptoNameListPermanentStored);
+                // hides the keyboard
+                InputMethodManager inputManager = (InputMethodManager)
+                        getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 
+                inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
+                        InputMethodManager.HIDE_NOT_ALWAYS);
+
+                String text = editTextSearch.getText().toString();
+                if (text.equals("")) {
+                    cryptoNameList.clear();
+                    cryptoNameList.addAll(cryptoNameListPermanentStored);
+                }
+                else {
+                    List<CryptoName> temp = new ArrayList<>();
+                    for (CryptoName c : cryptoNameList) {
+                        if (c.match(text)) {
+                            temp.add(new CryptoName(c.getName(), c.getSymbol()));
+                        }
+                    }
+                    cryptoNameList.clear();
+                    cryptoNameList.addAll(temp);
+                }
+                adapter.notifyDataSetChanged();
                 break;
             default:
                 int pos = recyclerView.getChildLayoutPosition(v);
@@ -122,9 +153,10 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
     }
 
     public void updateCryptoNames(List<CryptoName> nList) {
-        for (int i = 0; i < nList.size(); i++) {
-            cryptoNameList.add(nList.get(i));
-        }
+        cryptoNameList.clear();
+        cryptoNameList.addAll(nList);
+        cryptoNameListPermanentStored.clear();
+        cryptoNameListPermanentStored.addAll(nList);
         adapter.notifyDataSetChanged();
     }
 }
