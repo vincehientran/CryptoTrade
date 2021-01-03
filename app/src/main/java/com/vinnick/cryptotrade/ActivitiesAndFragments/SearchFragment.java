@@ -12,7 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
+import com.vinnick.cryptotrade.Asyncs.CryptoNameAsync;
 import com.vinnick.cryptotrade.CryptoHolderAdapter;
 import com.vinnick.cryptotrade.CryptoName;
 import com.vinnick.cryptotrade.R;
@@ -36,15 +38,12 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
     private String mParam1;
     private String mParam2;
 
-    private Button buttonBTC;
-    private Button buttonLTC;
-    private Button buttonETH;
-    private Button buttonXRP;
+    private Button buttonSearch;
     private View view;
     private RecyclerView recyclerView;
 
     private CryptoHolderAdapter adapter;
-    private final List<CryptoName> cryptoNameList = new ArrayList<>();
+    private List<CryptoName> cryptoNameList = new ArrayList<>();
 
     public SearchFragment() {
         // Required empty public constructor
@@ -82,23 +81,10 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
 
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_search, container, false);
-        buttonBTC = (Button) view.findViewById(R.id.button_BTC);
-        buttonBTC.setOnClickListener(this);
-        buttonLTC = (Button) view.findViewById(R.id.button_LTC);
-        buttonLTC.setOnClickListener(this);
-        buttonETH = (Button) view.findViewById(R.id.button_ETH);
-        buttonETH.setOnClickListener(this);
-        buttonXRP = (Button) view.findViewById(R.id.button_XRP);
-        buttonXRP.setOnClickListener(this);
+        buttonSearch = (Button) view.findViewById(R.id.button_search_search);
+        buttonSearch.setOnClickListener(this);
 
-        cryptoNameList.add(new CryptoName("Bitcoin","BTC"));
-        cryptoNameList.add(new CryptoName("Litecoin","LTC"));
-        cryptoNameList.add(new CryptoName("Bitcoin SV","BSV"));
-        cryptoNameList.add(new CryptoName("Bitcoin Cash","BCH"));
-        cryptoNameList.add(new CryptoName("Ethereum","ETH"));
-        cryptoNameList.add(new CryptoName("Ethereum Classic","ETC"));
-        cryptoNameList.add(new CryptoName("Dogecoin","DOGE"));
-        cryptoNameList.add(new CryptoName("Ripple","XRP"));
+        new CryptoNameAsync(this).execute();
 
         recyclerView = view.findViewById(R.id.recyclerView_search);
         adapter = new CryptoHolderAdapter(cryptoNameList, this);
@@ -112,17 +98,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.button_BTC:
-                goToCurrencyFragment("BTC");
-                break;
-            case R.id.button_LTC:
-                goToCurrencyFragment("LTC");
-                break;
-            case R.id.button_ETH:
-                goToCurrencyFragment("ETH");
-                break;
-            case R.id.button_XRP:
-                goToCurrencyFragment("XRP");
+            case R.id.button_search_search:
+
                 break;
             default:
                 int pos = recyclerView.getChildLayoutPosition(v);
@@ -142,5 +119,12 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
         FragmentTransaction transaction = fm.beginTransaction();
         transaction.replace(R.id.contentFragment, fragment);
         transaction.commit();
+    }
+
+    public void updateCryptoNames(List<CryptoName> nList) {
+        for (int i = 0; i < nList.size(); i++) {
+            cryptoNameList.add(nList.get(i));
+        }
+        adapter.notifyDataSetChanged();
     }
 }

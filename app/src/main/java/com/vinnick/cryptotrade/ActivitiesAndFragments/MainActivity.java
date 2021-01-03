@@ -18,9 +18,6 @@ public class MainActivity extends AppCompatActivity{
 
     private static final String TAG = "MainActivity";
 
-    private Button button;
-    private TextView text;
-
     private BottomNavigationView.OnNavigationItemSelectedListener navBarListener;
 
     @Override
@@ -57,10 +54,6 @@ public class MainActivity extends AppCompatActivity{
         FragmentTransaction transaction = fm.beginTransaction();
         transaction.replace(R.id.contentFragment, fragment);
         transaction.commit();
-
-        text = findViewById(R.id.textView3);
-        button = findViewById(R.id.button_BTC);
-
     }
 
     // methods to switch between fragments
