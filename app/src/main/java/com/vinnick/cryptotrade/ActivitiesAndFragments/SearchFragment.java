@@ -15,10 +15,9 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.vinnick.cryptotrade.Asyncs.CryptoNameAsync;
-import com.vinnick.cryptotrade.CryptoHolderAdapter;
+import com.vinnick.cryptotrade.SearchHolderAdapter;
 import com.vinnick.cryptotrade.CryptoName;
 import com.vinnick.cryptotrade.R;
 
@@ -46,7 +45,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
     private View view;
     private RecyclerView recyclerView;
 
-    private CryptoHolderAdapter adapter;
+    private SearchHolderAdapter adapter;
     private List<CryptoName> cryptoNameList = new ArrayList<>();
     private List<CryptoName> cryptoNameListPermanentStored = new ArrayList<>();
 
@@ -94,7 +93,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
         new CryptoNameAsync(this).execute();
 
         recyclerView = view.findViewById(R.id.recyclerView_search);
-        adapter = new CryptoHolderAdapter(cryptoNameList, this);
+        adapter = new SearchHolderAdapter(cryptoNameList, this, ((MainActivity)getActivity()).getWatchlist());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
@@ -159,4 +158,5 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
         cryptoNameListPermanentStored.addAll(nList);
         adapter.notifyDataSetChanged();
     }
+
 }
