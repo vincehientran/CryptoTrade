@@ -14,8 +14,8 @@ public class SearchHolder extends RecyclerView.ViewHolder{
 
     public SearchHolder(View v) {
         super(v);
-        textViewName = v.findViewById(R.id.textView_cryptoholder_name);
-        textViewSymbol = v.findViewById(R.id.textView_cryptoholder_symbol);
-        buttonWatchlist = v.findViewById(R.id.button_cryptoholder_watchlist);
+        textViewName = v.findViewById(R.id.textView_searchholder_name);
+        textViewSymbol = v.findViewById(R.id.textView_searchholder_symbol);
+        buttonWatchlist = v.findViewById(R.id.button_searchholder_watchlist);
     }
 }
