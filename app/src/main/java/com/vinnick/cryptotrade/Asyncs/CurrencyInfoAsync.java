@@ -89,21 +89,57 @@ public class CurrencyInfoAsync extends AsyncTask<String, Void, String> {
 
         try {
             JSONObject obj = json.getJSONObject(0);
-            circulatingSupply = obj.getString("circulating_supply");
+            double cSupplyDouble = obj.getDouble("circulating_supply");
+            long cSupply = (long) cSupplyDouble;
+            String cSupplyStr = "";
+            if (cSupply > 10_000_000_000L) {
+                cSupplyStr = (cSupply / 1_000_000_000L) + "B";
+            }
+            else if (cSupply > 1_000_000L) {
+                cSupplyStr = (cSupply / 1_000_000L) + "M";
+            }
+            else {
+                cSupplyStr = cSupply + "";
+            }
+            circulatingSupply = cSupplyStr;
         } catch (JSONException e) {
             circulatingSupply = "N/A";
         }
 
         try {
             JSONObject obj = json.getJSONObject(0);
-            maxSupply = obj.getString("max_supply");
+            double mSupplyDouble = obj.getDouble("max_supply");
+            long mSupply = (long) mSupplyDouble;
+            String mSupplyStr = "";
+            if (mSupply > 10_000_000_000L) {
+                mSupplyStr = (mSupply / 1_000_000_000L) + "B";
+            }
+            else if (mSupply > 1_000_000L) {
+                mSupplyStr = (mSupply / 1_000_000L) + "M";
+            }
+            else {
+                mSupplyStr = mSupply + "";
+            }
+            maxSupply = mSupplyStr;
         } catch (JSONException e) {
             maxSupply = "N/A";
         }
 
         try {
             JSONObject obj = json.getJSONObject(0);
-            marketCap = obj.getString("market_cap");
+            double mCapDouble = obj.getDouble("market_cap");
+            long mCap = (long) mCapDouble;
+            String mCapStr = "";
+            if (mCap > 10_000_000_000L) {
+                mCapStr = (mCap / 1_000_000_000L) + "B";
+            }
+            else if (mCap > 1_000_000L) {
+                mCapStr = (mCap / 1_000_000L) + "M";
+            }
+            else {
+                mCapStr = mCap + "";
+            }
+            marketCap = mCapStr;
         } catch (JSONException e) {
             marketCap = "N/A";
         }
