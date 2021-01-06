@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1037397213421",
+    "project_id": "cryptotrade-4a596",
+    "storage_bucket": "cryptotrade-4a596.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1037397213421:android:687525f173789e065bcce4",
+        "android_client_info": {
+          "package_name": "com.vinnick.cryptotrade"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1037397213421-sko8opdqfu82r2a5lqra1vp3q158ipvr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD144s9A8kq1CP4uznAtbrWu7RZFVGVFj8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1037397213421-sko8opdqfu82r2a5lqra1vp3q158ipvr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
