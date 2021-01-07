@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.vinnick.cryptotrade.R;
 import com.vinnick.cryptotrade.Watchlist;
 
@@ -21,14 +23,14 @@ public class MainActivity extends AppCompatActivity{
 
     private BottomNavigationView.OnNavigationItemSelectedListener navBarListener;
 
+    private String user;
+
     private Watchlist watchlist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        watchlist = new Watchlist();
 
         // set bottom navigation bar
         BottomNavigationView navBar = findViewById(R.id.bottomNavigationView);
@@ -51,6 +53,11 @@ public class MainActivity extends AppCompatActivity{
                 return true;
             }
         };
+
+        user = getIntent().getStringExtra("user");
+
+        watchlist = new Watchlist();
+
         navBar.setOnNavigationItemSelectedListener(navBarListener);
 
         // set the first default fragment
@@ -90,5 +97,13 @@ public class MainActivity extends AppCompatActivity{
 
     public void setWatchList(Watchlist watchList) {
         this.watchlist = watchList;
+    }
+
+    public void logOut() {
+        FirebaseAuth.getInstance().signOut();
+    }
+
+    public String getUserEmail() {
+        return user;
     }
 }

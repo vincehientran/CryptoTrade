@@ -54,6 +54,14 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        successfulSignIn(currentUser);
+    }
+
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
@@ -75,8 +83,6 @@ public class LoginActivity extends AppCompatActivity {
             firebaseAuthWithGoogle(account.getIdToken());
         } catch (ApiException e) {
             // Google Sign In failed, update UI appropriately
-            TextView textView = findViewById(R.id.textView_login_info);
-            textView.setText("Failed");
         }
     }
 
@@ -94,22 +100,16 @@ public class LoginActivity extends AppCompatActivity {
                             // If sign in fails, display a message to the user.
                             successfulSignIn(null);
                         }
-
-                        // ...
                     }
                 });
     }
 
     private void successfulSignIn(FirebaseUser user) {
-        TextView textView = findViewById(R.id.textView_login_info);
         if (user != null) {
-            String personName = user.getDisplayName();
-            String personEmail = user.getEmail();
-
-            textView.setText(personName + ", " + personEmail);
-        }
-        else {
-            textView.setText("Failed");
+            // there is a user that is logged in
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            intent.putExtra("user", user.getEmail());
+            LoginActivity.this.startActivity(intent);
         }
     }
 }

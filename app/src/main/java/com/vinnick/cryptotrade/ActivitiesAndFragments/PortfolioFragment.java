@@ -1,5 +1,6 @@
 package com.vinnick.cryptotrade.ActivitiesAndFragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,7 +8,10 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseUser;
 import com.vinnick.cryptotrade.R;
 
 /**
@@ -15,7 +19,7 @@ import com.vinnick.cryptotrade.R;
  * Use the {@link PortfolioFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PortfolioFragment extends Fragment {
+public class PortfolioFragment extends Fragment implements View.OnClickListener{
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -25,6 +29,11 @@ public class PortfolioFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private View view;
+    private Button buttonLogout;
+
+    private FirebaseUser user;
 
     public PortfolioFragment() {
         // Required empty public constructor
@@ -61,6 +70,26 @@ public class PortfolioFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_portfolio, container, false);
+        view = inflater.inflate(R.layout.fragment_portfolio, container, false);
+
+        buttonLogout = view.findViewById(R.id.button_portfolio_logout);
+        buttonLogout.setOnClickListener(this);
+
+        String email = ((MainActivity) getActivity()).getUserEmail();
+        TextView text = view.findViewById(R.id.textView_portfolio_info);
+        text.setText(email);
+
+        return view;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.button_portfolio_logout:
+                ((MainActivity)getActivity()).logOut();
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                startActivity(intent);
+                break;
+        }
     }
 }
