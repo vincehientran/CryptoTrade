@@ -6,7 +6,7 @@ package com.vinnick.cryptotrade;
 import java.util.HashMap;
 
 public class Wallet {
-
+//hello
     private HashMap <String, Double> wallet;
 
     public Wallet() {
