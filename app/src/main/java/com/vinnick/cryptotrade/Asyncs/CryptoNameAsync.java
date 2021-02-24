@@ -3,6 +3,7 @@ package com.vinnick.cryptotrade.Asyncs;
 import android.os.AsyncTask;
 
 import com.vinnick.cryptotrade.ActivitiesAndFragments.SearchFragment;
+import com.vinnick.cryptotrade.BuildConfig;
 import com.vinnick.cryptotrade.CryptoName;
 
 import org.json.JSONArray;
@@ -20,8 +21,8 @@ import java.util.List;
 public class CryptoNameAsync extends AsyncTask<String, Void, String> {
 
     private static final String API_URL = "https://api.pro.coinbase.com/currencies";
-    private static final String API_KEY = "08ce92adb613ed3c3f039d258cca84a2";
-    private static final String API_PASSPHRASE = "123pass";
+    private static final String API_KEY = BuildConfig.COINBASE_KEY;
+    private static final String API_PASSPHRASE = BuildConfig.COINBASE_PASSPHRASE;
 
     private SearchFragment searchFragment;
 

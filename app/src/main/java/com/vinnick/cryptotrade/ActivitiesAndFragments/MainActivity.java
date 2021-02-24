@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.vinnick.cryptotrade.BuildConfig;
 import com.vinnick.cryptotrade.R;
 import com.vinnick.cryptotrade.Watchlist;
 

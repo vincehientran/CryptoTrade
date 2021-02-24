@@ -18,9 +18,18 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField 'String', "NOMICS_KEY", NOMICS_KEY
+            buildConfigField 'String', "COINBASE_KEY", COINBASE_KEY
+            buildConfigField 'String', "COINBASE_PASSPHRASE", COINBASE_PASSPHRASE
+        }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField 'String', "NOMICS_KEY", NOMICS_KEY
+            buildConfigField 'String', "COINBASE_KEY", COINBASE_KEY
+            buildConfigField 'String', "COINBASE_PASSPHRASE", COINBASE_PASSPHRASE
         }
     }
     compileOptions {

@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 
 import com.jjoe64.graphview.series.DataPoint;
 import com.vinnick.cryptotrade.ActivitiesAndFragments.CurrencyFragment;
+import com.vinnick.cryptotrade.BuildConfig;
 import com.vinnick.cryptotrade.GraphType;
 
 import org.json.JSONArray;
@@ -26,7 +27,7 @@ import java.util.TimeZone;
 public class CurrencyHistoryAsync extends AsyncTask<String, Void, String> {
 
     private static final String API_LINK_BEGINNING = "https://api.nomics.com/v1/currencies/sparkline?key=";
-    private static final String API_KEY = "66d6fc35ed618c1fbf359c96d88b671c";
+    private static final String API_KEY = BuildConfig.NOMICS_KEY;
 
     private CurrencyFragment currencyFragment;
     private DataPoint[] dataPoints;

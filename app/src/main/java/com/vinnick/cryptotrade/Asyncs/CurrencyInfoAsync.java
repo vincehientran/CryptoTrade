@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 
 import com.jjoe64.graphview.series.DataPoint;
 import com.vinnick.cryptotrade.ActivitiesAndFragments.CurrencyFragment;
+import com.vinnick.cryptotrade.BuildConfig;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,7 +21,7 @@ public class CurrencyInfoAsync extends AsyncTask<String, Void, String> {
 
     private static final String API_LINK_BEGINNING = "https://api.nomics.com/v1/currencies/ticker?key=";
     //https://api.nomics.com/v1/currencies/ticker?key=demo-26240835858194712a4f8cc0dc635c7a&ids=BTC&interval=1d
-    private static final String API_KEY = "66d6fc35ed618c1fbf359c96d88b671c";
+    private static final String API_KEY = BuildConfig.NOMICS_KEY;
 
     private CurrencyFragment currencyFragment;
 
