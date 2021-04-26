@@ -22,6 +22,7 @@ android {
             buildConfigField 'String', "NOMICS_KEY", NOMICS_KEY
             buildConfigField 'String', "COINBASE_KEY", COINBASE_KEY
             buildConfigField 'String', "COINBASE_PASSPHRASE", COINBASE_PASSPHRASE
+            buildConfigField 'String', "FIREBASE_WEB_CLIENT_ID", FIREBASE_WEB_CLIENT_ID
         }
 
         release {
@@ -30,6 +31,7 @@ android {
             buildConfigField 'String', "NOMICS_KEY", NOMICS_KEY
             buildConfigField 'String', "COINBASE_KEY", COINBASE_KEY
             buildConfigField 'String', "COINBASE_PASSPHRASE", COINBASE_PASSPHRASE
+            buildConfigField 'String', "FIREBASE_WEB_CLIENT_ID", FIREBASE_WEB_CLIENT_ID
         }
     }
     compileOptions {
